@@ -11,7 +11,6 @@ from django.contrib.auth import logout
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
     context_dict = {}
-    context_dict['boldmessage'] = 'Crunchy, creamy, cookie, candy, cupcake!'
     context_dict['categories'] = category_list
 
     page_list = Page.objects.order_by('-views')[:5]
@@ -21,7 +20,7 @@ def index(request):
     return render(request, 'anotas/index.html', context=context_dict)
 
 def about(request):
-    context_dict = {'boldmessage': 'This tutorial has been put together by Dhruv'}
+    context_dict = {}
     if request.session.test_cookie_worked():
         print("TEST COOKIE WORKED!")
         request.session.delete_test_cookie()
