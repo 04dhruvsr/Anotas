@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+from markdownx.fields import MarkdownxField
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
@@ -34,3 +35,16 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+class Note(models.Model):
+    noteTitle = models.CharField(max_length=128)
+    noteID = models.AutoField(primary_key=True)
+    #content = MarkdownxField()
+    #userID
+    #pastOwners
+    #lastSave
+    #subject
+    #isPrivate
+    #viewCount
+    #copyCount
+    #fileName
