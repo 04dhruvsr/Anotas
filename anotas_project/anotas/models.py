@@ -1,7 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-from markdownx.fields import MarkdownxField
+from markdownx.models import MarkdownxField
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
@@ -39,12 +39,12 @@ class UserProfile(models.Model):
 class Note(models.Model):
     noteTitle = models.CharField(max_length=128)
     noteID = models.AutoField(primary_key=True)
-    #content = MarkdownxField()
-    #userID
-    #pastOwners
-    #lastSave
-    #subject
-    #isPrivate
-    #viewCount
-    #copyCount
-    #fileName
+    content = MarkdownxField(default="")
+   # userID = models.ForeignKey(User, on_delete=models.CASCADE)  # Assuming you have a User model
+    #pastOwners = models.ManyToManyField(User, related_name='past_owners', blank=True)
+    lastSave = models.DateTimeField(auto_now=True)
+    subject = models.CharField(max_length=255, blank=True, null=True)
+    isPrivate = models.BooleanField(default=False)
+  #  viewCount = models.PositiveIntegerField(default=0)
+   # copyCount = models.PositiveIntegerField(default=0)
+    fileName = models.CharField(max_length=255, blank=True, null=True)

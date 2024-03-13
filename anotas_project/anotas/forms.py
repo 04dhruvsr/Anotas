@@ -1,7 +1,8 @@
 from django import forms
-from anotas.models import Page, Category
+from anotas.models import Page, Category, Note
 from django.contrib.auth.models import User
 from anotas.models import UserProfile
+from markdownx.fields import MarkdownxFormField
 
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=128, help_text="Please enter the category name.")
@@ -42,3 +43,12 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('website', 'picture',)
+
+class NoteForm(forms.ModelForm):
+    title = forms.CharField(max_length=128, help_text="Please enter the title of the note.")
+    content = MarkdownxFormField()
+
+    class Meta:
+        model = Note
+        fields = ['title', 'content', 'subject', 'isPrivate', 'fileName']
+
