@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load anotas_template_tags %}
+
+<html>
+    <head>
+        <title>
+            Anotas -
+            {% block title_block %}
+                {% if user.is_authenticated %}
+                    howdy {{ user.username }}!
+                {% else %}
+                    hey there partner!
+                {% endif %}
+            {% endblock %}
+        </title>
+    </head>
+    <body>
+        <div>
+            {% block body_block %}
+            {% endblock %}
+        </div>
+        <hr />
+        <div>
+            {% block sidebar_block %}
+            {% get_category_list %}
+            {% endblock %}
+            </div>
+        <div>
+        </div>
+        <ul>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'anotas:restricted' %}">Restricted Page</a></li>
+                <li><a href="{% url 'anotas:logout' %}">Logout</a></li>
+                <li><a href="{% url 'anotas:add_category' %}">Add New Category</a></li>
+            {% else %}
+                <li><a href="{% url 'anotas:register' %}">Sign Up</a></li>
+                <li><a href="{% url 'anotas:login' %}">Login</a></li>
+            {% endif %}
+                <li><a href="{% url 'anotas:about' %}">About</a></li>
+                <li><a href="{% url 'anotas:index' %}">Index</a></li>
+        </ul>
+    </body>
+</html>
