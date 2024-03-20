@@ -48,3 +48,6 @@ class Note(models.Model):
   #  viewCount = models.PositiveIntegerField(default=0)
    # copyCount = models.PositiveIntegerField(default=0)
     fileName = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.noteTitle
