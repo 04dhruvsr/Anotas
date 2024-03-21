@@ -39,7 +39,7 @@ class UserProfile(models.Model):
 class Note(models.Model):
     noteTitle = models.CharField(max_length=128)
     noteID = models.AutoField(primary_key=True)
-    content = MarkdownxField(default="")
+    #content = MarkdownxField(default="")
    # userID = models.ForeignKey(User, on_delete=models.CASCADE)  # Assuming you have a User model
     #pastOwners = models.ManyToManyField(User, related_name='past_owners', blank=True)
     lastSave = models.DateTimeField(auto_now=True)
