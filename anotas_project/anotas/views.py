@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from anotas.forms import UserForm,UserProfileForm
+from anotas.forms import NoteForm, SubjectForm, UserProfileForm, UserForm
 from django.shortcuts import redirect
 from django.urls import reverse
 from anotas.models import *
@@ -36,7 +36,7 @@ def show_subject(request, subject_name_slug):
         context_dict['subject'] = None
         context_dict['pages'] = None
     return render(request, 'anotas/subject.html', context=context_dict)
-
+@login_required
 def add_subject(request):
     form = SubjectForm()
     if request.method == 'POST':
@@ -48,22 +48,23 @@ def add_subject(request):
             print(form.errors)
     return render(request, 'anotas/add_subject.html', {'form': form})
 
-def add_page(request, subject_name_slug):
+@login_required
+def add_note(request, subject_name_slug):
     try:
         subject = Subject.objects.get(slug=subject_name_slug)
     except Subject.DoesNotExist:
         subject = None
     if subject is None:
         return redirect('/anotas/')
-    form = PageForm()
+    form = NoteForm()
     if request.method == 'POST':
-        form = PageForm(request.POST)
+        form = NoteForm(request.POST)
         if form.is_valid():
             if subject:
-                page = form.save(commit=False)
-                page.subject = subject
-                page.views = 0
-                page.save()
+                note = form.save(commit=False)
+                note.subject = subject
+                note.views = 0
+                note.save()
                 return redirect(reverse('anotas:show_subject', kwargs={'subject_name_slug': subject_name_slug}))
         else:
             print(form.errors)
@@ -94,6 +95,31 @@ def register(request):
         profile_form = UserProfileForm()
 
     return render(request, 'anotas/register.html', context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+
+@login_required
+def copy_note(request, note_id):
+    original_note = get_object_or_404(Note, id=note_id)
+    new_owner = request.user
+    old_owners = original_note.past_owners
+    old_owners = old_owners.my_char_field
+    while len(old_owners+" "+ new_owner.username)>255:
+        old_owners = old_owners.split(" ")
+        old_owners = old_owners[1:]
+        old_owners = " ".join(old_owners)
+
+    new_note = Note(
+        subject=original_note.subject,
+        title=original_note.title,
+        content=original_note.content,
+        old_owners = old_owners
+        owner = new_owner
+        copyCount = original_note.copyCount + 1
+    )
+
+    new_note.save()
+
+    return redirect('anotas:show_note', note_id=new_note.id)
+
 
 def user_login(request):
     if request.method == 'POST':
