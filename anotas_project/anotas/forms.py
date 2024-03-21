@@ -1,19 +1,8 @@
 from django import forms
-from anotas.models import Page, Category
 from django.contrib.auth.models import User
-from anotas.models import UserProfile
+from anotas.models import Subject, Page, Note, UserProfile
+from markdownx.fields import MarkdownxFormField
 
-class CategoryForm(forms.ModelForm):
-    name = forms.CharField(max_length=128, help_text="Please enter the category name.")
-    views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-    likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-    slug = forms.CharField(widget=forms.HiddenInput(), required=False)
-
-
-    class Meta:
-
-        model = Category
-        fields = ('name',)
 
 class PageForm(forms.ModelForm):
     title = forms.CharField(max_length=128, help_text="Please enter the title of the page.")
@@ -22,7 +11,7 @@ class PageForm(forms.ModelForm):
 
     class Meta:
         model = Page
-        exclude = ('category',)
+        exclude = ('subject',)
 
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -42,3 +31,12 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('website', 'picture',)
+
+class NoteForm(forms.ModelForm):
+    title = forms.CharField(max_length=128, help_text="Please enter the title of the note.")
+    content = MarkdownxFormField()
+
+    class Meta:
+        model = Note
+        fields = ['noteTitle', 'subject', 'isPrivate', 'fileName']
+
