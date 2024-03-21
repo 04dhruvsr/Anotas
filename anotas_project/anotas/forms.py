@@ -46,9 +46,9 @@ class UserProfileForm(forms.ModelForm):
 
 class NoteForm(forms.ModelForm):
     title = forms.CharField(max_length=128, help_text="Please enter the title of the note.")
-    content = MarkdownxFormField()
+    #content = MarkdownxFormField()
 
     class Meta:
         model = Note
-        fields = ['title', 'content', 'subject', 'isPrivate', 'fileName']
+        fields = ['title', 'subject', 'isPrivate', 'fileName']
 

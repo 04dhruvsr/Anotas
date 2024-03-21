@@ -72,15 +72,6 @@
             {% block sidebar_block %}
             {% endblock %}
             </div>
-        <ul>
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'anotas:logout' %}">Logout</a></li>
-            {% else %}
-                <li><a href="{% url 'anotas:register' %}">Sign Up</a></li>
-                <li><a href="{% url 'anotas:login' %}">Login</a></li>
-            {% endif %}
-                <li><a href="{% url 'anotas:about' %}">About</a></li>
-                <li><a href="{% url 'anotas:home' %}">Home</a></li>
-        </ul>
+            <div>Developed by Team 3A</div>
     </body>
 </html>
