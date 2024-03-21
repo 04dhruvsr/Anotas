@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from anotas.forms import UserForm,UserProfileForm
+from anotas.forms import UserForm, SubjectForm
 from django.shortcuts import redirect
 from django.urls import reverse
 from anotas.models import *
@@ -29,12 +29,12 @@ def show_subject(request, subject_name_slug):
     context_dict = {}
     try:
         subject = Subject.objects.get(slug=subject_name_slug)
-        pages = Page.objects.filter(subject=subject)
-        context_dict['pages'] = pages
+        #pages = Page.objects.filter(subject=subject)
+       # context_dict['pages'] = pages
         context_dict['subject'] = subject
     except Subject.DoesNotExist:       
         context_dict['subject'] = None
-        context_dict['pages'] = None
+       # context_dict['pages'] = None
     return render(request, 'anotas/subject.html', context=context_dict)
 
 def add_subject(request):
@@ -48,52 +48,52 @@ def add_subject(request):
             print(form.errors)
     return render(request, 'anotas/add_subject.html', {'form': form})
 
-def add_page(request, subject_name_slug):
-    try:
-        subject = Subject.objects.get(slug=subject_name_slug)
-    except Subject.DoesNotExist:
-        subject = None
-    if subject is None:
-        return redirect('/anotas/')
-    form = PageForm()
-    if request.method == 'POST':
-        form = PageForm(request.POST)
-        if form.is_valid():
-            if subject:
-                page = form.save(commit=False)
-                page.subject = subject
-                page.views = 0
-                page.save()
-                return redirect(reverse('anotas:show_subject', kwargs={'subject_name_slug': subject_name_slug}))
-        else:
-            print(form.errors)
-    context_dict = {'form': form, 'subject': subject}
-    return render(request, 'anotas/add_page.html', context=context_dict)
+# def add_page(request, subject_name_slug):
+#     try:
+#         subject = Subject.objects.get(slug=subject_name_slug)
+#     except Subject.DoesNotExist:
+#         subject = None
+#     if subject is None:
+#         return redirect('/anotas/')
+#     form = PageForm()
+#     if request.method == 'POST':
+#         form = PageForm(request.POST)
+#         if form.is_valid():
+#             if subject:
+#                 page = form.save(commit=False)
+#                 page.subject = subject
+#                 page.views = 0
+#                 page.save()
+#                 return redirect(reverse('anotas:show_subject', kwargs={'subject_name_slug': subject_name_slug}))
+#         else:
+#             print(form.errors)
+#     context_dict = {'form': form, 'subject': subject}
+#     return render(request, 'anotas/add_page.html', context=context_dict)
 
 def register(request):
     registered = False
     if request.method == 'POST':
         user_form = UserForm(request.POST)
-        profile_form = UserProfileForm(request.POST)
+       # profile_form = UserProfileForm(request.POST)
 
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid(): #and profile_form.is_valid()
             user = user_form.save()
             user.set_password(user.password)
             user.save()
-            profile = profile_form.save(commit=False)
-            profile.user = user
+           # profile = profile_form.save(commit=False)
+         #   profile.user = user
 
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
-            profile.save()
+        #    if 'picture' in request.FILES:
+         #       profile.picture = request.FILES['picture']
+          #  profile.save()
             registered = True
         else:
-            print(user_form.errors, profile_form.errors)
+            print(user_form.errors) #profile_form.errors
     else:
         user_form = UserForm()
-        profile_form = UserProfileForm()
+       # profile_form = UserProfileForm()
 
-    return render(request, 'anotas/register.html', context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+    return render(request, 'anotas/register.html', context = {'user_form': user_form, 'registered': registered}) #'profile_form': profile_form
 
 def user_login(request):
     if request.method == 'POST':

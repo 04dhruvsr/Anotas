@@ -20,8 +20,8 @@ class Subject(models.Model):
 class UserProfile(models.Model):
     userID = models.OneToOneField(User, on_delete=models.CASCADE)
     #this comes from rango implementation might delete
-    website = models.URLField(blank=True) 
-    picture = models.ImageField(upload_to='profile_images', blank=True) 
+   # website = models.URLField(blank=True) 
+    #picture = models.ImageField(upload_to='profile_images', blank=True) 
 
     def __str__(self):
         return self.user.username
