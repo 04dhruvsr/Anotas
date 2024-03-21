@@ -24,8 +24,8 @@ from markdownx.fields import MarkdownxFormField
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
-        model = User
-        fields = ('username', 'email', 'password',)
+        model = UserProfile
+        fields = ('user', 'email', 'password',)
 
 #class UserProfileForm(forms.ModelForm):
  #   class Meta:

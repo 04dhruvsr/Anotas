@@ -15,7 +15,7 @@ class Subject(models.Model):
         super(Subject, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.name
+        return self.username.name
 
 class UserProfile(models.Model):
     userID = models.OneToOneField(User, on_delete=models.CASCADE)
