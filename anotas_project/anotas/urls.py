@@ -1,6 +1,8 @@
 from django.urls import path
 from anotas import views
 app_name = 'anotas'
+from anotas import views
+app_name = 'anotas'
 urlpatterns = [
 path('', views.home, name='home'),
 path('about/', views.about, name='about'),

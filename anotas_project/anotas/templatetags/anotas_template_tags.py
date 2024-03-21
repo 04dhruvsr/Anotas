@@ -1,8 +1,8 @@
 from django import template
-from anotas.models import Category
+from anotas.models import Subject
 
 register = template.Library()
 
-@register.inclusion_tag('anotas/categories.html')
+@register.inclusion_tag('anotas/subjects.html')
 def get_category_list():
-    return {'categories': Category.objects.all()}
+    return {'categories': Subject.objects.all()}

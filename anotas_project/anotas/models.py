@@ -2,25 +2,23 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 from markdownx.models import MarkdownxField
+from django.utils import timezone as tz
+from django.contrib.postgres.fields import ArrayField
 
-class Category(models.Model):
+class Subject(models.Model):
     name = models.CharField(max_length=128, unique=True)
     views = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     slug = models.SlugField(unique=True)
 
-    class Meta:
-        verbose_name_plural = 'Categories'
-
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        super(Category, self).save(*args, **kwargs)
+        super(Subject, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
     
 class Page(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=128)
     url = models.URLField()
     views = models.IntegerField(default=0)
@@ -29,24 +27,25 @@ class Page(models.Model):
         return self.title
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    website = models.URLField(blank=True)
-    picture = models.ImageField(upload_to='profile_images', blank=True)
+    userID = models.OneToOneField(User, on_delete=models.CASCADE)
+    #this comes from rango implementation might delete
+    website = models.URLField(blank=True) 
+    picture = models.ImageField(upload_to='profile_images', blank=True) 
 
     def __str__(self):
         return self.user.username
     
 class Note(models.Model):
-    noteTitle = models.CharField(max_length=128)
     noteID = models.AutoField(primary_key=True)
-    #content = MarkdownxField(default="")
-   # userID = models.ForeignKey(User, on_delete=models.CASCADE)  # Assuming you have a User model
-    #pastOwners = models.ManyToManyField(User, related_name='past_owners', blank=True)
-    lastSave = models.DateTimeField(auto_now=True)
-    subject = models.CharField(max_length=255, blank=True, null=True)
+    userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE) 
+    noteTitle = models.CharField(max_length=128)
+    past_owners = models.CharField(max_length = 255, blank=True)
+    lastSave = models.DateTimeField(default = tz.now) #auto_now=True
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    # content = MarkdownxField(default="")   #do we need this?
     isPrivate = models.BooleanField(default=False)
-  #  viewCount = models.PositiveIntegerField(default=0)
-   # copyCount = models.PositiveIntegerField(default=0)
+    viewCount = models.PositiveIntegerField(default=0)
+    copyCount = models.PositiveIntegerField(default=0)
     fileName = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):

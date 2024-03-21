@@ -1,17 +1,17 @@
 from django.contrib import admin
-from anotas.models import Category, Page
-from anotas.models import UserProfile
+from django.contrib.auth.models import User
 
 from django.contrib import admin
-from anotas.models import Category, Page
+from anotas.models import Subject, Page, Note, UserProfile
 
-class CategoryAdmin(admin.ModelAdmin):
+class SubjectAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug':('name',)}
 
-admin.site.register(Category, CategoryAdmin)
+admin.site.register(Subject, SubjectAdmin)
 
 class PageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'url')
+    list_display = ('title', 'url')
     
 admin.site.register(Page, PageAdmin)
 admin.site.register(UserProfile)
+admin.site.register(Note)
