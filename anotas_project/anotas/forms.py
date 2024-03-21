@@ -42,13 +42,17 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture',)
+        slug = forms.CharField(widget=forms.HiddenInput(), required=False)
+        fields = ('picture',)
 
 class NoteForm(forms.ModelForm):
-    title = forms.CharField(max_length=128, help_text="Please enter the title of the note.")
-    content = MarkdownxFormField()
+    noteTitle = forms.CharField(max_length=128, help_text="Note title:  ")
+    subject = forms.CharField(max_length=128, help_text="Note subject")
+    isPrivate = forms.BooleanField(help_text="Is Private", required=False)
+    fileName = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    content = forms.Textarea()
 
     class Meta:
         model = Note
-        fields = ['title', 'content', 'subject', 'isPrivate', 'fileName']
+        fields = ['noteTitle', 'subject', 'isPrivate', 'fileName', 'content']
 
