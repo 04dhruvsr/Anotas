@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
-def index(request):
+def home(request):
     category_list = Category.objects.order_by('-likes')[:5]
     context_dict = {}
     context_dict['categories'] = category_list
@@ -17,7 +17,7 @@ def index(request):
     context_dict['pages'] = page_list
     request.session.set_test_cookie()
 
-    return render(request, 'anotas/index.html', context=context_dict)
+    return render(request, 'anotas/home.html', context=context_dict)
 
 def about(request):
     context_dict = {}
@@ -105,7 +105,7 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request, user)
-                return redirect(reverse('anotas:index'))
+                return redirect(reverse('anotas:home'))
             else:
                 return HttpResponse("Your anotas account is disabled.")
         else:
@@ -122,4 +122,4 @@ def restricted(request):
 @login_required
 def user_logout(request):
     logout(request)
-    return redirect(reverse('anotas:index'))
+    return redirect(reverse('anotas:home'))

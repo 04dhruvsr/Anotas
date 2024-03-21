@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 {% load static %}
 {% load anotas_template_tags %}
-<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
 
 <html>
     <head>
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
         <title>
             Anotas -
             {% block title_block %}
@@ -16,8 +17,51 @@
                 {% endif %}
             {% endblock %}
         </title>
+        <style>
+            .navbar .nav-link {
+                padding: 0.5rem 1rem; /* Adjust the padding as needed */
+            }
+        </style>
     </head>
     <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <a class="navbar-brand" href="#">Anotas</a>
+                    </div>
+                    <div class="col-auto">
+                        <div class="row">
+                            <div class="col">
+                                <a class="nav-link" href="{% url 'anotas:home' %}">Home</a>
+                            </div>
+                            <div class="col">
+                                <a class="nav-link" href="{% url 'anotas:about' %}">About</a>
+                            </div>
+                            {% if user.is_authenticated %}
+                            <div class="col">
+                                <a class="nav-link" href="{% url 'anotas:logout' %}">Logout</a>
+                            </div>
+                            {% else %}
+                            <div class="col">
+                                <a class="nav-link" href="{% url 'anotas:register' %}">Sign Up</a>
+                            </div>
+                            <div class="col">
+                                <a class="nav-link" href="{% url 'anotas:login' %}">Login</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        
+        
+        
+        
+        
+        
         <div>
             {% block body_block %}
             {% endblock %}
@@ -25,22 +69,17 @@
         <hr />
         <div>
             {% block sidebar_block %}
-            {% get_category_list %}
             {% endblock %}
             </div>
-        <div>
-        </div>
         <ul>
             {% if user.is_authenticated %}
-                <li><a href="{% url 'anotas:restricted' %}">Restricted Page</a></li>
                 <li><a href="{% url 'anotas:logout' %}">Logout</a></li>
-                <li><a href="{% url 'anotas:add_category' %}">Add New Category</a></li>
             {% else %}
                 <li><a href="{% url 'anotas:register' %}">Sign Up</a></li>
                 <li><a href="{% url 'anotas:login' %}">Login</a></li>
             {% endif %}
                 <li><a href="{% url 'anotas:about' %}">About</a></li>
-                <li><a href="{% url 'anotas:index' %}">Index</a></li>
+                <li><a href="{% url 'anotas:home' %}">Home</a></li>
         </ul>
     </body>
 </html>
