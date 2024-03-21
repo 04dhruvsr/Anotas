@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from anotas.forms import CategoryForm,PageForm, UserForm,UserProfileForm
+from anotas.forms import CategoryForm,PageForm, UserForm,UserProfileForm, NoteForm
 from django.shortcuts import redirect
 from django.urls import reverse
-from anotas.models import Category, Page
+from anotas.models import Category, Page, Note, UserProfile
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+import time
 
 def home(request):
     category_list = Category.objects.order_by('-likes')[:5]
@@ -114,6 +115,42 @@ def user_login(request):
         
     else:
         return render(request, 'anotas/login.html')
+    
+def user_page(request):
+    context_dict = {}
+    try:
+        notes = Note.objects.filter(userID=request.user.get_username())
+        context_dict['notes'] = notes
+    except Category.DoesNotExist:       
+        context_dict['notes'] = None
+    return render(request, 'anotas/user.html', context=context_dict)
+
+def add_note(request):
+    note_form = NoteForm()
+    if request.method == 'POST':
+        note_form = NoteForm(request.POST)
+        if note_form.is_valid():
+            noteTitle = note_form.cleaned_data["noteTitle"]
+            content = note_form.cleaned_data["content"]
+            subject = note_form.cleaned_data["subject"]
+            isPrivate = note_form.cleaned_data["isPrivate"]
+            note = Note(noteTitle=noteTitle, content=content, subject=subject,isPrivate=isPrivate)
+            note.set_fileName()
+            note.set_userID
+            note.save()
+            
+            print(note_form.cleaned_data['content'])
+            f = open(note.get_fileName, "w")
+            f.write(content)
+            return redirect('/anotas/')
+        else:
+            print(note_form.errors)
+
+    return render(request, 'anotas/note_reader.html', {'note_form': note_form})
+    
+def display_file(request):
+    context_dict = {'textgoeshere' : 'text(eventually)'}
+    return render(request, "anotas/note_reader.html", context=context_dict)
     
 @login_required
 def restricted(request):

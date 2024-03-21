@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<ul>
+{% if notes %}
+    {% for n in notes %}
+        <li>
+            <a href="{% url 'anotas:user_page' n.slug %}">{{ n.noteTitle }}</a>
+        </li>
+    {% endfor %}
+{% else %}
+    <li><strong>No Notes.</strong></li>
+{% endif %}
+</ul>

@@ -30,24 +30,36 @@ class Page(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
 
     def __str__(self):
         return self.user.username
     
+
+    
 class Note(models.Model):
     noteTitle = models.CharField(max_length=128)
     noteID = models.AutoField(primary_key=True)
     content = MarkdownxField(default="")
-   # userID = models.ForeignKey(User, on_delete=models.CASCADE)  # Assuming you have a User model
+    userID = models.CharField(max_length=255, blank=True, null=True)
     #pastOwners = models.ManyToManyField(User, related_name='past_owners', blank=True)
-    lastSave = models.DateTimeField(auto_now=True)
     subject = models.CharField(max_length=255, blank=True, null=True)
     isPrivate = models.BooleanField(default=False)
   #  viewCount = models.PositiveIntegerField(default=0)
    # copyCount = models.PositiveIntegerField(default=0)
     fileName = models.CharField(max_length=255, blank=True, null=True)
+    
+    def set_noteID(self, inp):
+        self.noteID = inp
+        
+    def set_fileName(self):
+        self.fileName = self.noteTitle + str(self.noteID) + ".md"
+        
+    def get_fileName(self):
+        return self.fileName
+        
+    def set_userID(self, request):
+        self.userID = request.user.get_username()
 
     def __str__(self):
         return self.noteTitle
