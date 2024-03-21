@@ -15,6 +15,7 @@ dependencies:
   - pip:
     - django==2.2.28
     - pillow==10.2.0
+    - psycopg2==2.9.9
     - pytz==2024.1
     - sqlparse==0.4.4
 prefix: C:\Users\04Dhr\anaconda3\envs\anotas
