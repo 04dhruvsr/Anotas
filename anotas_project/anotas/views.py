@@ -105,7 +105,7 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request, user)
-                return redirect(reverse('anotas:index'))
+                return redirect(reverse('anotas:home'))
             else:
                 return HttpResponse("Your anotas account is disabled.")
         else:
@@ -122,4 +122,4 @@ def restricted(request):
 @login_required
 def user_logout(request):
     logout(request)
-    return redirect(reverse('anotas:index'))
+    return redirect(reverse('anotas:home'))
