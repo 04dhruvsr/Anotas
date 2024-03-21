@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from anotas.forms import PageForm, UserForm,UserProfileForm
+from anotas.forms import UserForm,UserProfileForm
 from django.shortcuts import redirect
 from django.urls import reverse
 from anotas.models import *
@@ -9,12 +9,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
 def home(request):
-    category_list = Category.objects.order_by('-likes')[:5]
+    subject_list = Subject.objects.order_by('-likes')[:5]
     context_dict = {}
     context_dict['subject'] = subject_list
 
-    page_list = Page.objects.order_by('-views')[:5]
-    context_dict['pages'] = page_list
+    # context_dict['pages'] = page_list
     request.session.set_test_cookie()
 
     return render(request, 'anotas/home.html', context=context_dict)
