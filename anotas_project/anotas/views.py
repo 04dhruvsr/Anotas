@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
-def index(request):
+def home(request):
     category_list = Category.objects.order_by('-likes')[:5]
     context_dict = {}
     context_dict['categories'] = category_list
@@ -17,7 +17,7 @@ def index(request):
     context_dict['pages'] = page_list
     request.session.set_test_cookie()
 
-    return render(request, 'anotas/index.html', context=context_dict)
+    return render(request, 'anotas/home.html', context=context_dict)
 
 def about(request):
     context_dict = {}
