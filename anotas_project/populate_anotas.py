@@ -1,12 +1,19 @@
 import os
+import random
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','anotas_project.settings')
 
 import django
 django.setup()
 from anotas.models import Category, Page
+def populate():
+    users = ["michel", "alvaro", "juan",]
+    users = create_users()
+    for user in users:
+        pass
+        
+
 
 def populate():
-    view_number = 10
     python_pages = [
         {'title': 'Official Python Tutorial',
         'url':'http://docs.python.org/3/tutorial/'},

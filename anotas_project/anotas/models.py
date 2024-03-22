@@ -24,8 +24,6 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
     
-
-    
 class Note(models.Model):
     noteID = models.AutoField(primary_key=True)
     content = MarkdownxField(default="")
@@ -56,15 +54,3 @@ class Note(models.Model):
 
     def __str__(self):
         return self.noteTitle
-    
-class Subject(models.Model):
-    name = models.CharField(max_length=128, unique=True)
-    views = models.IntegerField(default=0)
-    slug = models.SlugField(unique=True)
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super(Subject, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return self.name
