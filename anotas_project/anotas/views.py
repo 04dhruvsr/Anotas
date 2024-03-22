@@ -7,6 +7,7 @@ from anotas.models import *
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+import os
 
 def home(request):
     subject_list = Subject.objects.order_by('-likes')[:5]
@@ -157,12 +158,12 @@ def user_login(request):
         return render(request, 'anotas/login.html')
 
 @login_required
-def note_editor(request, note_name_slug):
+def note_editor(request, note_name_slug): #TODO doesnt read yet
     context_dict = {}
     try:
-        note = Note.objects.get(slug=note_name_slug.lower(), userID=request.user.get_username())
+        note = Note.objects.get(slug=note_name_slug.lower())
         local_path = os.path.dirname(__file__)
-        file_path = os.path.relpath('..\\' + note.get_fileName(), local_path)
+        file_path = os.path.relpath('..\\' + note.fileName, local_path)
         file_path = os.path.relpath('..\\', file_path)
         print("Wow", "", file_path)
         f = open(file_path, "r")

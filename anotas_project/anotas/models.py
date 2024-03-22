@@ -38,11 +38,13 @@ class Note(models.Model):
     viewCount = models.PositiveIntegerField(default=0)
     copyCount = models.PositiveIntegerField(default=0)
     fileName = models.CharField(max_length=255, blank=True, null=True)
+    slug = models.SlugField(unique=True)
     
     def save(self, *args, **kwargs):
         if not self.fileName:
             self.fileName = f"{self.noteTitle}.txt"
             self.lastSave = tz.now()
+            self.slug = slugify(self.noteTitle)
             # self.past_owners +=
         
         super(Note, self).save(*args, **kwargs)
