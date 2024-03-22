@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from anotas.forms import NoteForm, SubjectForm, UserProfileForm, UserForm
 from django.shortcuts import redirect
@@ -53,24 +53,33 @@ def add_subject(request):
 @login_required
 def add_note(request):
     """try:
+
         subject = Subject.objects.get(slug=subject_name_slug)
     except Subject.DoesNotExist:
         subject = None
     if subject is None:
         return redirect('/anotas/')"""
     form = NoteForm()
+    sub_form = SubjectForm()
+    request.method = "POST"
+
     if request.method == 'POST':
         form = NoteForm(request.POST)
+        sub_form = SubjectForm(request.POST)
         if form.is_valid():
+
             note = form.save(commit=False)
             note.views = 0
             note.save()
-            f = open(note.get_fileName(), "w")
-            f.write()
+            print(note.noteTitle)
+            f = open(note.fileName, "w")
+            f.write("")
             return redirect(reverse('anotas:note_editor', kwargs={'note_name_slug': note.noteTitle}))
-        else:
-            print(form.errors)
-    context_dict = {'form': form}
+        elif sub_form.is_valid():
+            subject = sub_form.save()
+            subject.save()
+    
+    context_dict = {'form': form, "sub_form": sub_form}
     return render(request, 'anotas/note_reader.html', context=context_dict)
 
 def register(request):

@@ -35,13 +35,18 @@ class UserProfileForm(forms.ModelForm):
 
 class NoteForm(forms.ModelForm):
     noteTitle = forms.CharField(max_length=128, help_text="Note title:  ")
-    subject = forms.CharField(max_length=128, help_text="Note subject")
+    """choices = Subject.objects.all()
+    choiceText = ()
+    for i in list(choices):
+        print(type(Subject.objects.get(name=i)))
+        choiceText = ((Subject.objects.get(name=i), i.name),) + choiceText
+    print(choiceText)"""
+    subject = forms.ModelChoiceField(queryset=Subject.objects.all())
     isPrivate = forms.BooleanField(help_text="Is Private", required=False)
-    fileName = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-
+    
     class Meta:
         model = Note
-        fields = ['noteTitle', 'subject', 'isPrivate', 'fileName']
+        fields = ['noteTitle', "subject", 'isPrivate']
         
 # class EditForm(forms.ModelForm):
 #     content = forms.Textarea()
@@ -50,9 +55,9 @@ class NoteForm(forms.ModelForm):
 #         fields = ["content"]
         
 class SubjectForm(forms.ModelForm):
-    name = forms.CharField(max_length=128, help_text="What subject is this for")
+    name = forms.CharField(max_length=128, help_text="Subject")
 
     class Meta:
-        model = Note
+        model = Subject
         fields = ['name']
 
