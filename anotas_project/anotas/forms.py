@@ -35,13 +35,13 @@ class UserProfileForm(forms.ModelForm):
 
 class NoteForm(forms.ModelForm):
     noteTitle = forms.CharField(max_length=128, help_text="Note title:  ")
-    choices = Subject.objects.all()
+    """choices = Subject.objects.all()
     choiceText = ()
     for i in list(choices):
         print(type(Subject.objects.get(name=i)))
         choiceText = ((Subject.objects.get(name=i), i.name),) + choiceText
-    print(choiceText)
-    subject = forms.ChoiceField(widget=forms.Select(), choices=choiceText)
+    print(choiceText)"""
+    subject = forms.ModelChoiceField(queryset=Subject.objects.all())
     isPrivate = forms.BooleanField(help_text="Is Private", required=False)
     
     class Meta:

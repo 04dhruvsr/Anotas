@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from anotas.forms import NoteForm, SubjectForm, UserProfileForm, UserForm
 from django.shortcuts import redirect
@@ -61,15 +61,16 @@ def add_note(request):
     form = NoteForm()
     sub_form = SubjectForm()
     request.method = "POST"
-    print(request.method)
     if request.method == 'POST':
-        form = NoteForm(request.POST, initial = {"origin" : NoteForm.choiceText[1]})
+        form = NoteForm(request.POST)
         sub_form = SubjectForm(request.POST)
         if form.is_valid():
-            print("","valid","")
-            print(form.subject)
             note = form.save(commit=False)
             note.views = 0
+            #print(request.user)
+            logged_user = get_object_or_404(User, id=request.user.id)
+            print(type(logged_user))
+            note.userID = get_object_or_404(UserProfile, user=logged_user)
             note.save()
             print(note.noteTitle)
             f = open(note.get_fileName(), "w")
