@@ -7,7 +7,8 @@ from anotas.models import Note, UserProfile, Subject
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-import time
+import os
+import os.path
 
 def home(request):
     subject_list = Subject.objects.order_by('-likes')[:5]
@@ -188,7 +189,11 @@ def note_editor(request, note_name_slug):
     context_dict = {}
     try:
         note = Note.objects.get(slug=note_name_slug.lower(), userID=request.user.get_username())
-        f = open(note.get_fileName(), "r")
+        local_path = os.path.dirname(__file__)
+        file_path = os.path.relpath('..\\' + note.get_fileName(), local_path)
+        file_path = os.path.relpath('..\\', file_path)
+        print("Wow", "", file_path)
+        f = open(file_path, "r")
         context_dict["existing"] = f.readlines()
         context_dict["title"] = note.noteTitle
         print(f.readlines())

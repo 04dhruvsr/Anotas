@@ -27,6 +27,7 @@ class UserProfile(models.Model):
 
     
 class Note(models.Model):
+    noteTitle = models.CharField(max_length=128)
     noteID = models.AutoField(primary_key=True)
     content = MarkdownxField(default="")
     userID = models.CharField(max_length=255, blank=True, null=True)
