@@ -190,26 +190,6 @@ def note_editor(request, note_name_slug): #TODO doesnt read yet
         context_dict["title"] = None
     return render(request, "anotas/note_editor.html", context=context_dict)
 
-
-def user_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        
-        if user:
-            if user.is_active:
-                login(request, user)
-                return redirect(reverse('anotas:home'))
-            else:
-                return HttpResponse("Your anotas account is disabled.")
-        else:
-            print(f"Invalid login details: {username}, {password}")
-            return HttpResponse("Invalid login details supplied.")
-        
-    else:
-        return render(request, 'anotas/login.html')
-
 def search_results(request):
     if request.method == "POST":
         user_search= request.POST["user_search"]
