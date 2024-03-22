@@ -19,7 +19,9 @@ class Subject(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    picture = models.ImageField(upload_to='profile_images', blank=True)
+    #this comes from rango implementation might delete
+    website = models.URLField(blank=True) 
+    picture = models.ImageField(upload_to='profile_images', blank=True) 
 
     def __str__(self):
         return self.user.username
@@ -27,16 +29,18 @@ class UserProfile(models.Model):
 class Note(models.Model):
     noteTitle = models.CharField(max_length=128)
     noteID = models.AutoField(primary_key=True)
-    content = MarkdownxField(default="")
-    userID = models.CharField(max_length=255, blank=True, null=True)
-    #pastOwners = models.ManyToManyField(User, related_name='past_owners', blank=True)
-    subject = models.CharField(max_length=255, blank=True, null=True)
+    userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE) 
+    noteTitle = models.CharField(max_length=128, unique=True)
+    past_owners = models.CharField(max_length = 255, default = "", null = True)
+    lastSave = models.DateTimeField(default = tz.now, blank = True,null = True) #auto_now=True
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    # content = MarkdownxField(default="")   #do we need this?
     isPrivate = models.BooleanField(default=False)
     viewCount = models.PositiveIntegerField(default=0)
     copyCount = models.PositiveIntegerField(default=0)
     fileName = models.CharField(max_length=255, blank=True, null=True)
-    slug = models.SlugField(unique=True)
-    
+
+
     def set_noteID(self, inp):
         self.noteID = inp
         
@@ -48,9 +52,14 @@ class Note(models.Model):
         
     def set_userID(self, request):
         self.userID = request.user.get_username()
-        
+
+   
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.noteTitle)
+        if not self.fileName:
+            self.fileName = f"{self.noteTitle}.txt"
+            self.lastSave = tz.now
+            # self.past_owners +=
+        
         super(Note, self).save(*args, **kwargs)
 
     def __str__(self):
