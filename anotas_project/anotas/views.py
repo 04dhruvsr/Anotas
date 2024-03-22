@@ -160,29 +160,51 @@ def user_page(request):
     return render(request, 'anotas/user.html', context=context_dict)
 
 @login_required
-def add_note(request):
-    note_form = NoteForm()
-    request.method = "POST"
+def add_note(request, subject_name_slug):
+    try:
+        subject = Subject.objects.get(slug=subject_name_slug)
+    except Subject.DoesNotExist:
+        subject = None
+    if subject is None:
+        return redirect('/anotas/')
+    form = NoteForm()
     if request.method == 'POST':
-        note_form = NoteForm(request.POST)
-        if note_form.is_valid():
-            note = note_form.save(commit=False)
-            noteTitle = note_form.cleaned_data["noteTitle"]
-            content = note_form.cleaned_data["content"]
-            subject = note_form.cleaned_data["subject"]
-            isPrivate = note_form.cleaned_data["isPrivate"]
-            note = Note(noteTitle=noteTitle, content=content, subject=subject,isPrivate=isPrivate)
-            note.set_fileName()
-            note.set_userID(request)
-            note.save()
-                
-            f = open(note.get_fileName(), "w")
-            f.write(content)
+        form = NoteForm(request.POST)
+        if form.is_valid():
+            if subject:
+                note = form.save(commit=False)
+                note.subject = subject
+                note.views = 0
+                note.save()
+                return redirect(reverse('anotas:show_subject', kwargs={'subject_name_slug': subject_name_slug}))
         else:
-            print("uh oh")
-            print(note_form.errors)
-    print(note_form.is_valid())
-    return render(request, 'anotas/note_reader.html', {'note_form': note_form})
+            print(form.errors)
+    context_dict = {'form': form, 'subject': subject}
+    return render(request, 'anotas/add_page.html', context=context_dict)
+#Dhruv version
+# def add_note(request):
+#     note_form = NoteForm()
+#     request.method = "POST"
+#     if request.method == 'POST':
+#         note_form = NoteForm(request.POST)
+#         if note_form.is_valid():
+#             note = note_form.save(commit=False)
+#             noteTitle = note_form.cleaned_data["noteTitle"]
+#             content = note_form.cleaned_data["content"]
+#             subject = note_form.cleaned_data["subject"]
+#             isPrivate = note_form.cleaned_data["isPrivate"]
+#             note = Note(noteTitle=noteTitle, content=content, subject=subject,isPrivate=isPrivate)
+#             note.set_fileName()
+#             note.set_userID(request)
+#             note.save()
+                
+#             f = open(note.get_fileName(), "w")
+#             f.write(content)
+#         else:
+#             print("uh oh")
+#             print(note_form.errors)
+#     print(note_form.is_valid())
+#     return render(request, 'anotas/note_reader.html', {'note_form': note_form})
 
 @login_required
 def note_editor(request, note_name_slug):
