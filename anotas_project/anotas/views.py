@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from anotas.forms import CategoryForm,PageForm, UserForm,UserProfileForm, NoteForm, EditForm
 from django.shortcuts import redirect
 from django.urls import reverse
-from anotas.models import Category, Page, Note, UserProfile
+from anotas.models import Category, Page, Note, UserProfile, Subject
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
@@ -173,6 +173,18 @@ def note_editor(request, note_name_slug):
         context_dict['existing'] = None
         context_dict["title"] = None
     return render(request, "anotas/note_editor.html", context=context_dict)
+
+def show_subject(request, subject_name_slug):
+    context_dict = {}
+    try:
+        subject = Subject.objects.get(slug=subject_name_slug)
+        pages = Page.objects.filter(subject=subject)
+        context_dict['pages'] = pages
+        context_dict['subject'] = subject
+    except Subject.DoesNotExist:       
+        context_dict['subject'] = None
+        context_dict['pages'] = None
+    return render(request, 'anotas/subject.html', context=context_dict)
         
         
 @login_required

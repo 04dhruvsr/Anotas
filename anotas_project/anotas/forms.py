@@ -61,4 +61,11 @@ class EditForm(forms.ModelForm):
     class Meta:
         model = Note
         fields = ["content"]
+        
+class SubjectForm(forms.ModelForm):
+    name = forms.CharField(max_length=128, help_text="What subject is this for")
+
+    class Meta:
+        model = Note
+        fields = ['name']
 
