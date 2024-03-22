@@ -1,0 +1,103 @@
+* {
+    box-sizing: border-box;
+
+}
+
+/*STYLES FOR HOMEPAGE*/
+
+/*Search Box and Button*/
+.search-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-box input[type="text"] {
+    display: flex;
+    border: solid black;
+    border-radius: 10px;
+    outline: none;
+    background: none;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 100px;
+    margin-bottom: 200px;
+    font-size: 16px;
+    width: 600px;
+    padding: 10px 20px;
+}
+
+.search-box button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-top: 100px;
+    margin-bottom: 200px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.search-box button:hover {
+    background-color: #45a049;
+}
+
+
+/*Top Subject Text*/
+.top-subjects {
+    font-family: Arial, sans-serif;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*Subject Boxes*/
+.subjects {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-bottom: 300px;
+}
+
+.subject1, .subject2, .subject3 {
+    width: 30%;
+
+}
+
+.subject {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    height: 600%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/*About Anotas Section*/
+.aboutHeading {
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.aboutDescriptionBox {
+    margin-bottom: 12%;
+}
+
+.aboutText {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 30px;
+    padding-left: 80px;
+    padding-right: 80px;
+    font-size: 75%;
+}
