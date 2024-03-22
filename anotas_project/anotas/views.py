@@ -175,23 +175,15 @@ def note_editor(request, note_name_slug): #TODO doesnt read yet
     try:
         note = Note.objects.get(slug=note_name_slug.lower())
         local_path = os.path.dirname(__file__)
-        file_path = os.path.relpath('..\\' + note.fileName, local_path)
-        file_path = os.path.relpath('..\\', file_path)
-        print("Wow", "", file_path)
-        f = open(file_path, "r")
+        print(local_path)
+        local_path = local_path[:-6]
+        print(local_path)
+        f = open(local_path + note.fileName, "r")
         context_dict["existing"] = f.readlines()
         context_dict["title"] = note.noteTitle
         print(f.readlines())
-        print(note.get_fileName())
+        print(note.fileName)
         f.close()
-        edit_form = EditForm(request.POST)
-        request.method = "POST"
-        if request.method == "POST":
-            if edit_form.is_valid():
-                print(edit_form.cleaned_data)
-                content = edit_form.cleaned_data["content"]
-                f = open(note.get_fileName(), "w")
-                f.write(content)
     except Note.DoesNotExist:
         context_dict['existing'] = None
         context_dict["title"] = None
