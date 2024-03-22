@@ -124,8 +124,7 @@ def copy_note(request, note_id):
     new_owner = request.user
     new_note = Note(
         subject=original_note.subject,
-        title=original_note.title,
-        content=original_note.content,
+        title=original_note.noteTitle + "_copy by_" + str(request.user),
         old_owners = old_owners,
         userID = new_owner,
         copyCount = original_note.copyCount + 1,
