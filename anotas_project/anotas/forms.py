@@ -48,12 +48,6 @@ class NoteForm(forms.ModelForm):
         model = Note
         fields = ['noteTitle', "subject", 'isPrivate']
         
-# class EditForm(forms.ModelForm):
-#     content = forms.Textarea()
-#     class Meta:
-#         model = Note
-#         fields = ["content"]
-        
 class SubjectForm(forms.ModelForm):
     name = forms.CharField(max_length=128, help_text="Subject")
 

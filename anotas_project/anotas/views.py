@@ -70,6 +70,7 @@ def add_note(request):
 
             note = form.save(commit=False)
             note.views = 0
+            note.userID = get_object_or_404(UserProfile, user=request.user)
             note.save()
             print(note.noteTitle)
             f = open(note.fileName, "w")
@@ -174,25 +175,20 @@ def note_editor(request, note_name_slug): #TODO doesnt read yet
     try:
         note = Note.objects.get(slug=note_name_slug.lower())
         local_path = os.path.dirname(__file__)
-        file_path = os.path.relpath('..\\' + note.fileName, local_path)
-        file_path = os.path.relpath('..\\', file_path)
-        print("Wow", "", file_path)
-        f = open(file_path, "r")
-        context_dict["existing"] = f.readlines()
+        print(local_path)
+        local_path = local_path[:-6]
+        print(local_path)
+        f = open(local_path + note.fileName, "r")
+        text = ""
+        for line in f.readlines():
+            text += line + " "
         context_dict["title"] = note.noteTitle
         print(f.readlines())
-        print(note.get_fileName())
+        print(note.fileName)
+        context_dict["text"] = text
         f.close()
-        edit_form = EditForm(request.POST)
-        request.method = "POST"
-        if request.method == "POST":
-            if edit_form.is_valid():
-                print(edit_form.cleaned_data)
-                content = edit_form.cleaned_data["content"]
-                f = open(note.get_fileName(), "w")
-                f.write(content)
     except Note.DoesNotExist:
-        context_dict['existing'] = None
+        context_dict['text'] = None
         context_dict["title"] = None
     return render(request, "anotas/note_editor.html", context=context_dict)
 
