@@ -140,7 +140,7 @@ def user_page(request):
         user_profile = UserProfile.objects.get(user=request.user)
         notes = Note.objects.filter(userID = user_profile.id)
         print(user_profile)
-    #     # print(Note.objects.filter(user=request.user.get_username()))
+        print(notes)
         context_dict['notes'] = notes
     except UserProfile.DoesNotExist:       
         context_dict['notes'] = None
@@ -179,6 +179,7 @@ def note_editor(request, note_name_slug): #TODO doesnt read yet
         text = ""
         for line in f.readlines():
             text += line + " "
+        print(text)
         context_dict["title"] = note.noteTitle
         print(f.readlines())
         print(note.fileName)
@@ -187,11 +188,13 @@ def note_editor(request, note_name_slug): #TODO doesnt read yet
     except Note.DoesNotExist:
         context_dict['text'] = None
         context_dict["title"] = None
+    print(text)
     return render(request, "anotas/note_editor.html", context=context_dict)
 
 def search_results(request):
     if request.method == "POST":
         user_search= request.POST["user_search"]
+        print(user_search)
         notes= Note.objects.filter(noteTitle__contains= user_search)
         subjects= Subject.objects.filter(name__contains= user_search)
         return render(request, 'anotas/search_results.html', {"user_search": user_search, "notes": notes, "subjects": subjects})

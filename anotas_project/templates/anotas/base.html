@@ -120,6 +120,8 @@
     <a href="{% url 'anotas:home' %}" style="font-size: xx-large">Home</a>
     <!-- Authentication links -->
     {% if user.is_authenticated %}
+        <a href="{% url 'anotas:user_page' %}" style="font-size: xx-large">User</a>
+        <a href="{% url 'anotas:note_reader' %}" style="font-size: xx-large">New Note</a>
         <a href="{% url 'anotas:logout' %}" style="font-size: xx-large">Logout</a>
     {% else %}
         <a href="{% url 'anotas:register' %}" style="font-size: xx-large">Sign Up</a>
