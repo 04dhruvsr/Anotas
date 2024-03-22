@@ -1,77 +1,165 @@
-<!DOCTYPE html>
 {% load static %}
-{% load anotas_template_tags %}
-
-
+<!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-        <title>
-            Anotas -
-            {% block title_block %}
-                {% if user.is_authenticated %}
-                    howdy {{ user.username }}!
-                {% else %}
-                    hey there partner!
-                {% endif %}
-            {% endblock %}
-        </title>
-        <style>
-            .navbar .nav-link {
-                padding: 0.5rem 2rem;
-                font-size: 16px;
-            }
-        </style>
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid">
-                <div class="row align-items-center">
-                    <div class="col">
-                        <a class="navbar-brand" href="#">Anotas</a>
-                    </div>
-                    <div class="col-auto">
-                        <div class="row">
-                            <div class="col">
-                                <a class="nav-link" href="{% url 'anotas:home' %}">Home</a>
-                            </div>
-                            <div class="col">
-                                <a class="nav-link" href="{% url 'anotas:about' %}">About</a>
-                            </div>
-                            {% if user.is_authenticated %}
-                            <div class="col">
-                                <a class="nav-link" href="{% url 'anotas:logout' %}">Logout</a>
-                            </div>
-                            {% else %}
-                            <div class="col">
-                                <a class="nav-link" href="{% url 'anotas:register' %}">Sign Up</a>
-                            </div>
-                            <div class="col">
-                                <a class="nav-link" href="{% url 'anotas:login' %}">Login</a>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        
-        
-        
-        
-        
-        
-        
-        <div>
-            {% block body_block %}
-            {% endblock %}
-        </div>
-        <hr />
-        <div>
-            {% block sidebar_block %}
-            {% endblock %}
-            </div>
-            <div>Developed by Team 3A</div>
-    </body>
+<head>
+    <title>
+        Anotas -
+        {% block title_block %}
+            {% if user.is_authenticated %}
+                howdy {{ user.username }}!
+            {% else %}
+                hey there partner!
+            {% endif %}
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            font-size: xx-large;
+        }
+
+        /* Styles for navbar */
+        .navbar {
+            background-color: #343a40;
+            color: #fff;
+            padding: 20px 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar span {
+            cursor: pointer;
+            margin-right: 20px;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* Styles for sidebar */
+        .sidebar {
+            height: 100%;
+            background-color: #343a40;
+            overflow-x: hidden;
+            padding-top: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            z-index: 1000;
+            transition: 0.5s;
+        }
+
+        .sidebar a {
+            padding: 10px 15px 10px 30px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #ccc;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #fff;
+        }
+
+        .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+            cursor: pointer;
+        }
+
+        /* Style for the overlay */
+        .overlay {
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            z-index: 998;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow-x: hidden;
+            transition: 0.5s;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Styles for footer */
+        .footer {
+            font-size: large;
+            background-color: #343a40;
+            color: #fff;
+            padding: 0px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Centers the footer content */
+            position: fixed; /* Fixed at the bottom */
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <!-- Your sidebar content -->
+    <a href="{% url 'anotas:home' %}" style="font-size: xx-large">Home</a>
+    <!-- Authentication links -->
+    {% if user.is_authenticated %}
+        <a href="{% url 'anotas:logout' %}" style="font-size: xx-large">Logout</a>
+    {% else %}
+        <a href="{% url 'anotas:register' %}" style="font-size: xx-large">Sign Up</a>
+        <a href="{% url 'anotas:login' %}" style="font-size: xx-large">Login</a>
+    {% endif %}
+</div>
+
+<div id="main">
+    <!-- Overlay -->
+    <div id="myOverlay" class="overlay" onclick="closeNav()"></div>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <span onclick="openNav()">☰</span>
+        <a href="#">Anotas</a>
+    </div>
+
+    {% block content %}
+        <!-- Your page content -->
+    {% endblock %}
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <p>&copy; Developed by WAD2 Team 3A</p>
+</div>
+
+<script>
+    // Script to open and close the sidebar
+    function openNav() {
+        document.getElementById("mySidebar").style.width = "250px";
+        document.getElementById("myOverlay").classList.add('active');
+    }
+
+    function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("myOverlay").classList.remove('active');
+    }
+</script>
+
+</body>
 </html>

@@ -24,33 +24,35 @@ from markdownx.fields import MarkdownxFormField
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
-        model = UserProfile
-        fields = ('user', 'email', 'password',)
+        model = User
+        fields = ('username', 'email', 'password',)
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture',)
+        slug = forms.CharField(widget=forms.HiddenInput(), required=False)
+        fields = ('picture',)
 
 class NoteForm(forms.ModelForm):
-    noteTitle = forms.CharField(max_length=128, help_text="Please enter the title of the note.")
-    # userId = forms.(required = True)
-    # subject = forms.ForeignKey(required = True)
-
-    # def __init__(self, *args, **kwargs):
-    #     self.request = kwargs.pop("request")
-    #     super(ContactForm, self).__init__(*args, **kwargs)
-    #     self.fields['contact_name'].label = "Your name:"
-    #     self.fields['contact_name'].initial = self.request.user.userID
+    noteTitle = forms.CharField(max_length=128, help_text="Note title:  ")
+    subject = forms.CharField(max_length=128, help_text="Note subject")
+    isPrivate = forms.BooleanField(help_text="Is Private", required=False)
+    fileName = forms.BooleanField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Note
-        # fields = ['noteTitle', 'subject', 'isPrivate', 'fileName']
-        fields = ['noteTitle', 'isPrivate', 'fileName']
-
+        fields = ['noteTitle', 'subject', 'isPrivate', 'fileName']
+        
+# class EditForm(forms.ModelForm):
+#     content = forms.Textarea()
+#     class Meta:
+#         model = Note
+#         fields = ["content"]
+        
 class SubjectForm(forms.ModelForm):
     name = forms.CharField(max_length=128, help_text="What subject is this for")
 
     class Meta:
         model = Note
         fields = ['name']
+

@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from anotas.forms import UserForm,UserProfileForm
+from anotas.forms import NoteForm, SubjectForm, UserProfileForm, UserForm
 from django.shortcuts import redirect
 from django.urls import reverse
 from anotas.models import *
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+import os
 
 def home(request):
     subject_list = Subject.objects.order_by('-likes')[:5]
@@ -37,6 +38,7 @@ def show_subject(request, subject_name_slug):
         context_dict['pages'] = None
     return render(request, 'anotas/subject.html', context=context_dict)
 
+@login_required
 def add_subject(request):
     form = SubjectForm()
     if request.method == 'POST':
@@ -48,27 +50,28 @@ def add_subject(request):
             print(form.errors)
     return render(request, 'anotas/add_subject.html', {'form': form})
 
-def add_page(request, subject_name_slug):
-    try:
+@login_required
+def add_note(request):
+    """try:
         subject = Subject.objects.get(slug=subject_name_slug)
     except Subject.DoesNotExist:
         subject = None
     if subject is None:
-        return redirect('/anotas/')
-    form = PageForm()
+        return redirect('/anotas/')"""
+    form = NoteForm()
     if request.method == 'POST':
-        form = PageForm(request.POST)
+        form = NoteForm(request.POST)
         if form.is_valid():
-            if subject:
-                page = form.save(commit=False)
-                page.subject = subject
-                page.views = 0
-                page.save()
-                return redirect(reverse('anotas:show_subject', kwargs={'subject_name_slug': subject_name_slug}))
+            note = form.save(commit=False)
+            note.views = 0
+            note.save()
+            f = open(note.get_fileName(), "w")
+            f.write()
+            return redirect(reverse('anotas:note_editor', kwargs={'note_name_slug': note.noteTitle}))
         else:
             print(form.errors)
-    context_dict = {'form': form, 'subject': subject}
-    return render(request, 'anotas/add_page.html', context=context_dict)
+    context_dict = {'form': form}
+    return render(request, 'anotas/note_reader.html', context=context_dict)
 
 def register(request):
     registered = False
@@ -94,6 +97,96 @@ def register(request):
         profile_form = UserProfileForm()
 
     return render(request, 'anotas/register.html', context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+
+@login_required
+def copy_note(request, note_id):
+    original_note = get_object_or_404(Note, id=note_id)
+    
+    old_owners = original_note.past_owners
+    old_owners = old_owners.my_char_field
+
+    previous_owner = get_object_or_404(UserID,original_note.userID).username
+    # new_owner.username
+    while len(old_owners+" "+ previous_owner)>255:
+        old_owners = old_owners.split(" ")
+        old_owners = old_owners[1:]
+        old_owners = " ".join(old_owners)
+    old_owners = old_owners+ " " + previous_owner
+
+    new_owner = request.user
+    new_note = Note(
+        subject=original_note.subject,
+        title=original_note.title,
+        content=original_note.content,
+        old_owners = old_owners,
+        userID = new_owner,
+        copyCount = original_note.copyCount + 1,
+    )
+
+    new_note.save()
+
+    return redirect('anotas:show_note', note_id=new_note.id)
+
+def user_page(request):
+    context_dict = {}
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+        notes = Note.objects.filter(userID = user_profile.id)
+        print(user_profile)
+    #     # print(Note.objects.filter(user=request.user.get_username()))
+        context_dict['notes'] = notes
+    except UserProfile.DoesNotExist:       
+        context_dict['notes'] = None
+    return render(request, 'anotas/user.html', context=context_dict)
+
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        
+        if user:
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('anotas:home'))
+            else:
+                return HttpResponse("Your anotas account is disabled.")
+        else:
+            print(f"Invalid login details: {username}, {password}")
+            return HttpResponse("Invalid login details supplied.")
+        
+    else:
+        return render(request, 'anotas/login.html')
+
+@login_required
+def note_editor(request, note_name_slug): #TODO doesnt read yet
+    context_dict = {}
+    try:
+        note = Note.objects.get(slug=note_name_slug.lower())
+        local_path = os.path.dirname(__file__)
+        file_path = os.path.relpath('..\\' + note.fileName, local_path)
+        file_path = os.path.relpath('..\\', file_path)
+        print("Wow", "", file_path)
+        f = open(file_path, "r")
+        context_dict["existing"] = f.readlines()
+        context_dict["title"] = note.noteTitle
+        print(f.readlines())
+        print(note.get_fileName())
+        f.close()
+        edit_form = EditForm(request.POST)
+        request.method = "POST"
+        if request.method == "POST":
+            if edit_form.is_valid():
+                print(edit_form.cleaned_data)
+                content = edit_form.cleaned_data["content"]
+                f = open(note.get_fileName(), "w")
+                f.write(content)
+    except Note.DoesNotExist:
+        context_dict['existing'] = None
+        context_dict["title"] = None
+    return render(request, "anotas/note_editor.html", context=context_dict)
+
 
 def user_login(request):
     if request.method == 'POST':
