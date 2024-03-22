@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% extends 'anotas/base.html' %}
+{% load static %}
+<script src="{% static 'reader.js' %}"></script>
+{% block title_block %}
+    <title>{{title}}</title>
+{% endblock %}
+
+{% block body_block %}
+        <h1>{{title}}</h1>
+        <div>
+            <form id="edit_form" method="post" action="/anotas/user/note/">
+                {% csrf_token %}
+                {% for hidden in edit_form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in edit_form.visible_fields %}
+                    {{ field.errors }}
+                    {{ field.help_text }}
+                    {{ field }}
+                {% endfor %}
+                <input type="submit" name="submit" value="Save Note" />
+            </form>
+            <textarea id="inpbox" name="input" rows="10" cols="100">
+            </textarea>
+            <button onclick="readText()">Save Text</button>
+        </div>
+{% endblock %}
