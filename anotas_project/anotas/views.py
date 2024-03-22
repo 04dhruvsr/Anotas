@@ -50,27 +50,25 @@ def add_subject(request):
     return render(request, 'anotas/add_subject.html', {'form': form})
 
 @login_required
-def add_note(request, subject_name_slug):
-    try:
+def add_note(request):
+    """try:
         subject = Subject.objects.get(slug=subject_name_slug)
     except Subject.DoesNotExist:
         subject = None
     if subject is None:
-        return redirect('/anotas/')
+        return redirect('/anotas/')"""
     form = NoteForm()
     if request.method == 'POST':
         form = NoteForm(request.POST)
         if form.is_valid():
-            if subject:
-                note = form.save(commit=False)
-                note.subject = subject
-                note.views = 0
-                note.save()
-                return redirect(reverse('anotas:show_subject', kwargs={'subject_name_slug': subject_name_slug}))
+            note = form.save(commit=False)
+            note.views = 0
+            note.save()
+            return redirect(reverse('anotas:show_subject', kwargs={'subject_name_slug': subject_name_slug}))
         else:
             print(form.errors)
-    context_dict = {'form': form, 'subject': subject}
-    return render(request, 'anotas/add_page.html', context=context_dict)
+    context_dict = {'form': form}
+    return render(request, 'anotas/note_reader.html', context=context_dict)
 
 def register(request):
     registered = False
