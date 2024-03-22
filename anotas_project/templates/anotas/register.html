@@ -13,7 +13,8 @@
       <h2>Sign Up with Anotas</h2>
     </div>
     <div class="login-form">
-      <form action="/submit-login" method="POST">
+      <form id="user_form" method="post" action="{% url 'anotas:register' %}" enctype="multipart/form-data">
+        {% csrf_token %}
         <div class="input-group">
           <label for="username">Username</label>
           <input
@@ -36,7 +37,7 @@
         </div>
 
         <div class="submit-btn" style="margin-top: 60px">
-          <button type="submit">Sign Up</button>
+          <button type="submit" name="submit">Sign Up</button>
         </div>
       </form>
     </div>
