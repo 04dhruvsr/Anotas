@@ -1,35 +1,46 @@
-{% extends 'anotas/base.html' %}
-{% load static %}
+{% extends 'anotas/base.html' %} {% load static %} {% block content %}
 
-{% block title_block %}
-    Register
-{% endblock %}
-
-{% block body_block %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <h1 class="text-center mb-4">Register for Anotas</h1>
-            {% if registered %}
-            <div class="alert alert-success text-center" role="alert">
-                Thank you for registering!
-            </div>
-            <p class="text-center"><a href="{% url 'anotas:index' %}" class="btn btn-primary">Return to the homepage</a></p>
-            {% else %}
-            <div class="alert alert-info text-center" role="alert">
-                Register here!
-            </div>
-            <form id="user_form" method="post" action="{% url 'anotas:register' %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ user_form.as_p }}
-                {{ profile_form.as_p }}
-                <div class="text-center">
-                    <button type="submit" name="submit" class="btn btn-primary">Register</button>
-                </div>
-            </form>
-            {% endif %}
-        </div>
+<!-- Register Part -->
+<div
+  class="register"
+  style="margin-left: 200px; margin-right: 200px; margin-bottom: 200px"
+>
+  <div class="login-container">
+    <div
+      class="login-text"
+      style="display: flex; justify-content: center; margin-bottom: 100px"
+    >
+      <h2>Sign Up with Anotas</h2>
     </div>
-</div>
-{% endblock %}
+    <div class="login-form">
+      <form action="/submit-login" method="POST">
+        <div class="input-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            required
+            placeholder="Enter a Username"
+          />
+        </div>
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            placeholder="Enter a Password"
+          />
+        </div>
 
+        <div class="submit-btn" style="margin-top: 60px">
+          <button type="submit">Sign Up</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
