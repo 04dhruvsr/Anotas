@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from anotas.forms import CategoryForm,PageForm, UserForm,UserProfileForm, NoteForm, EditForm
+from anotas.forms import UserForm,UserProfileForm, NoteForm, EditForm
 from django.shortcuts import redirect
 from django.urls import reverse
-from anotas.models import Category, Page, Note, UserProfile, Subject
+from anotas.models import Note, UserProfile, Subject
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
@@ -154,10 +154,11 @@ def user_page(request):
         print(request.user.get_username())
         print(Note.objects.filter(userID=request.user.get_username()))
         context_dict['notes'] = notes
-    except Category.DoesNotExist:       
+    except Note.DoesNotExist:       
         context_dict['notes'] = None
     return render(request, 'anotas/user.html', context=context_dict)
 
+@login_required
 def add_note(request):
     note_form = NoteForm()
     request.method = "POST"
@@ -182,6 +183,7 @@ def add_note(request):
     print(note_form.is_valid())
     return render(request, 'anotas/note_reader.html', {'note_form': note_form})
 
+@login_required
 def note_editor(request, note_name_slug):
     context_dict = {}
     try:
