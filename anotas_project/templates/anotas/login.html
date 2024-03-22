@@ -7,11 +7,13 @@
       <div class="login-text">
         <h2>Log In to Anotas</h2>
         <div class="alternate-login">
-          <a href="#">Sign Up</a> | <a href="#">Login as Guest</a>
+          <a href="{% url 'anotas:register' %}">Sign Up</a> |
+          <a href="#">Login as Guest</a>
         </div>
       </div>
       <div class="login-form">
-        <form action="/submit-login" method="POST">
+        <form id="login_form" method="post" action="{% url 'anotas:login' %}">
+          {% csrf_token %}
           <div class="input-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required />
@@ -29,9 +31,9 @@
         </form>
       </div>
     </div>
-    </div>
-    <!-- Image Part -->
-    <div class="image-placeholder"></div>
+  </div>
+  <!-- Image Part -->
+  <div class="image-placeholder"></div>
 </div>
 
 {% endblock %}
