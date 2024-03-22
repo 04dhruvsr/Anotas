@@ -127,11 +127,12 @@ def copy_note(request, note_id):
 def user_page(request):
     context_dict = {}
     try:
-        notes = Note.objects.filter(userID=request.user.userID)
-        print(request.user.get_username())
-        print(Note.objects.filter(userID=request.user.get_username()))
+        user_profile = UserProfile.objects.get(user=request.user)
+        notes = Note.objects.filter(userID = user_profile.id)
+        print(user_profile)
+    #     # print(Note.objects.filter(user=request.user.get_username()))
         context_dict['notes'] = notes
-    except Note.DoesNotExist:       
+    except UserProfile.DoesNotExist:       
         context_dict['notes'] = None
     return render(request, 'anotas/user.html', context=context_dict)
 
