@@ -7,10 +7,9 @@ from anotas.models import Subject, Note, UserProfile
 class SubjectAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug':('name',)}
 
-    
-
-    
+admin.site.register(Subject, SubjectAdmin)
 
     
 
 admin.site.register(UserProfile)
+admin.site.register(Note)
