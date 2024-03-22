@@ -27,11 +27,10 @@ class UserProfile(models.Model):
         return self.user.username
     
 class Note(models.Model):
-    noteTitle = models.CharField(max_length=128)
     noteID = models.AutoField(primary_key=True)
     userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE) 
     noteTitle = models.CharField(max_length=128, unique=True)
-    past_owners = models.CharField(max_length = 255, default = "", null = True)
+    past_owners = models.CharField(max_length = 255, default = "", null = True, blank =True )
     lastSave = models.DateTimeField(default = tz.now, blank = True,null = True) #auto_now=True
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     # content = MarkdownxField(default="")   #do we need this?
@@ -40,25 +39,11 @@ class Note(models.Model):
     copyCount = models.PositiveIntegerField(default=0)
     fileName = models.CharField(max_length=255, blank=True, null=True)
 
-
-    def set_noteID(self, inp):
-        self.noteID = inp
-        
-    def set_fileName(self):
-        self.fileName = self.noteTitle + str(self.noteID) + ".md"
-        
-    def get_fileName(self):
-        return self.fileName
-        
-    def set_userID(self, request):
-        self.userID = request.user.get_username()
-
-   
     def save(self, *args, **kwargs):
         if not self.fileName:
             self.fileName = f"{self.noteTitle}.txt"
-            self.lastSave = tz.now
-            self.past_owners +
+            self.lastSave = tz.now()
+            # self.past_owners +=
         
         super(Note, self).save(*args, **kwargs)
 
