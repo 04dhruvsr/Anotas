@@ -59,18 +59,27 @@ def add_note(request):
     if subject is None:
         return redirect('/anotas/')"""
     form = NoteForm()
+    sub_form = SubjectForm()
+    request.method = "POST"
+    print(request.method)
     if request.method == 'POST':
-        form = NoteForm(request.POST)
+        form = NoteForm(request.POST, initial = {"origin" : NoteForm.choiceText[1]})
+        sub_form = SubjectForm(request.POST)
         if form.is_valid():
+            print("","valid","")
+            print(form.subject)
             note = form.save(commit=False)
             note.views = 0
             note.save()
+            print(note.noteTitle)
             f = open(note.get_fileName(), "w")
             f.write()
             return redirect(reverse('anotas:note_editor', kwargs={'note_name_slug': note.noteTitle}))
-        else:
-            print(form.errors)
-    context_dict = {'form': form}
+        elif sub_form.is_valid():
+            subject = sub_form.save()
+            subject.save()
+    
+    context_dict = {'form': form, "sub_form": sub_form}
     return render(request, 'anotas/note_reader.html', context=context_dict)
 
 def register(request):

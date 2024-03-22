@@ -8,7 +8,7 @@
 {% block body_block %}
         <h1>New Note</h1>
         <div>
-            <form id="form" method="post" action="/anotas/user/">
+            <form id="form" method="post" action="/anotas/user/note/">
                 {% csrf_token %}
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}
@@ -19,6 +19,18 @@
                     {{ field }}
                 {% endfor %}
                 <input type="submit" name="submit" value="Save Note" />
+            </form>
+            <form id="sub_form" method="post" action="/anotas/user/note/">
+                {% csrf_token %}
+                {% for hidden in sub_form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in sub_form.visible_fields %}
+                    {{ field.errors }}
+                    {{ field.help_text }}
+                    {{ field }}
+                {% endfor %}
+                <input type="submit" name="submit" value="Add subject" />
             </form>
         </div>
 {% endblock %}
