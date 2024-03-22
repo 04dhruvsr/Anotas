@@ -53,6 +53,7 @@ def add_subject(request):
 @login_required
 def add_note(request):
     """try:
+
         subject = Subject.objects.get(slug=subject_name_slug)
     except Subject.DoesNotExist:
         subject = None
@@ -61,20 +62,18 @@ def add_note(request):
     form = NoteForm()
     sub_form = SubjectForm()
     request.method = "POST"
+
     if request.method == 'POST':
         form = NoteForm(request.POST)
         sub_form = SubjectForm(request.POST)
         if form.is_valid():
+
             note = form.save(commit=False)
             note.views = 0
-            #print(request.user)
-            logged_user = get_object_or_404(User, id=request.user.id)
-            print(type(logged_user))
-            note.userID = get_object_or_404(UserProfile, user=logged_user)
             note.save()
             print(note.noteTitle)
-            f = open(note.get_fileName(), "w")
-            f.write()
+            f = open(note.fileName, "w")
+            f.write("")
             return redirect(reverse('anotas:note_editor', kwargs={'note_name_slug': note.noteTitle}))
         elif sub_form.is_valid():
             subject = sub_form.save()
