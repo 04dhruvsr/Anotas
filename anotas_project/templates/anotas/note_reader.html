@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% extends 'anotas/base.html' %}
+{% load static %}
+{% block title_block %}
+    <title>Note</title>
+{% endblock %}
+
+{% block body_block %}
+        <h1>New Note</h1>
+        <div>
+            <form id="note_form" method="post" action="/anotas/user/note/">
+                {% csrf_token %}
+                {% for hidden in note_form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in note_form.visible_fields %}
+                    {{ field.errors }}
+                    {{ field.help_text }}
+                    {{ field }}
+                {% endfor %}
+                <input type="submit" name="submit" value="Save Note" />
+            </form>
+        </div>
+{% endblock %}

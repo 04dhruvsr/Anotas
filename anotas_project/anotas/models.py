@@ -19,33 +19,52 @@ class Subject(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    #this comes from rango implementation might delete
-    website = models.URLField(blank=True) 
-    picture = models.ImageField(upload_to='profile_images', blank=True) 
+    picture = models.ImageField(upload_to='profile_images', blank=True)
 
     def __str__(self):
         return self.user.username
     
+
+    
 class Note(models.Model):
     noteID = models.AutoField(primary_key=True)
-    userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE) 
-    noteTitle = models.CharField(max_length=128, unique=True)
-    past_owners = models.CharField(max_length = 255, default = "", null = True)
-    lastSave = models.DateTimeField(default = tz.now, blank = True,null = True) #auto_now=True
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    # content = MarkdownxField(default="")   #do we need this?
+    content = MarkdownxField(default="")
+    userID = models.CharField(max_length=255, blank=True, null=True)
+    #pastOwners = models.ManyToManyField(User, related_name='past_owners', blank=True)
+    subject = models.CharField(max_length=255, blank=True, null=True)
     isPrivate = models.BooleanField(default=False)
     viewCount = models.PositiveIntegerField(default=0)
     copyCount = models.PositiveIntegerField(default=0)
     fileName = models.CharField(max_length=255, blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        if not self.fileName:
-            self.fileName = f"{self.noteTitle}.txt"
-            self.lastSave = tz.now
-            # self.past_owners +=
+    slug = models.SlugField(unique=True)
+    
+    def set_noteID(self, inp):
+        self.noteID = inp
         
+    def set_fileName(self):
+        self.fileName = self.noteTitle + str(self.noteID) + ".md"
+        
+    def get_fileName(self):
+        return self.fileName
+        
+    def set_userID(self, request):
+        self.userID = request.user.get_username()
+        
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.noteTitle)
         super(Note, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.noteTitle
+    
+class Subject(models.Model):
+    name = models.CharField(max_length=128, unique=True)
+    views = models.IntegerField(default=0)
+    slug = models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Subject, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name

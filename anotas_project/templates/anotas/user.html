@@ -1,0 +1,14 @@
+{% extends 'anotas/base.html' %}
+{% load static %}
+
+{% block body_block %}
+    {% if notes %}
+    <ul>
+        {% for note in notes %}
+        <li><a href="{{ note.noteTitle }}">{{ note.noteTitle }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <strong>No notes.</strong>
+    {% endif %}
+{% endblock %}
