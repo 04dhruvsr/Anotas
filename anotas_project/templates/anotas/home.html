@@ -1,21 +1,13 @@
 <!DOCTYPE html>
 {% extends 'anotas/base.html' %}
-{% load staticfiles %}
+{% load static %}
 {% block title_block %}
     <title>Anotas</title>
 {% endblock %}
 
 {% block body_block %}
-        <h1>Anotas Index</h1>
 
         <div>
-<<<<<<< Updated upstream
-<<<<<<<< Updated upstream:anotas_project/templates/anotas/index.html
-========
-=======
-<<<<<<< Updated upstream:anotas_project/templates/anotas/index.html
-=======
->>>>>>> Stashed changes
         <br>
         <form method=POST action="{% url 'anotas:search_results'%}">
             {% csrf_token %}
@@ -24,11 +16,6 @@
             <button class="btn-outline-secondary" type="submit"> Search</button>
             </center>
         </form>
-<<<<<<< Updated upstream
->>>>>>>> Stashed changes:anotas_project/templates/anotas/home.html
-=======
->>>>>>> Stashed changes:anotas_project/templates/anotas/home.html
->>>>>>> Stashed changes
         <h2>Most Liked Categories</h2>
         {% if categories %}
             <ul>
@@ -54,5 +41,5 @@
                 <strong>There are no pages present.</strong>
             {% endif %}
 
-        </div>
+        </div> -->
 {% endblock %}
