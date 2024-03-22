@@ -1,0 +1,79 @@
+{% extends 'anotas/base.html' %}
+{% load static %}
+ 
+{% block body_block %}
+    {% if notes %}
+    <ul>
+        {% for note in notes %}
+        <li><a href="{{ note.noteTitle }}">{{ note.noteTitle }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <strong>No notes.</strong>
+    {% endif %}
+{% endblock %}
+ 
+{% block content %}
+ 
+<style>
+  /* Add some basic styling */
+  body {
+    font-family: Arial, sans-serif;
+  }
+  header, footer {
+    text-align: center;
+    padding: 1em;
+  }
+  .containerUser {
+    width: 80%;
+    margin: auto;
+  }
+  .button {
+    display: block;
+    width: 200px;
+    padding: 10px;
+    margin: 20px 0;
+    background: #f0f0f0;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+  }
+  .notes-section, .saved-notes-section {
+    margin-bottom: 20px;
+  }
+  .details-panel {
+    background: #f0f0f0;
+    padding: 10px;
+    min-height: 150px;
+  }
+</style>
+</head>
+<body>
+ 
+<header>
+  <div class="containerUser">
+    <span>Application Name</span>
+    <span>Username</span>
+  </div>
+</header>
+ 
+<main class="containerUser">
+  <button class="button" onclick='{% url "anotas:note" %}' >Create New Note</button>
+ 
+  <div class="notes-section">
+    <h2>My Notes Section Text</h2>
+    <div class="details-panel">
+      <!-- Details content goes here -->
+    </div>
+  </div>
+ 
+  <div class="saved-notes-section">
+    <h2>Saved Notes Section Text</h2>
+    <div class="details-panel">
+      <!-- Details content goes here -->
+    </div>
+  </div>
+ 
+ 
+ 
+{% endblock %}

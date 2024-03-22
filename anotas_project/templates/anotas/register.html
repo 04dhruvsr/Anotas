@@ -1,24 +1,47 @@
-{% extends 'anotas/base.html' %}
-{% load static %}
+{% extends 'anotas/base.html' %} {% load static %} {% block content %}
 
-{% block title_block %}
-    Register
-{% endblock %}
+<!-- Register Part -->
+<div
+  class="register"
+  style="margin-left: 200px; margin-right: 200px; margin-bottom: 200px"
+>
+  <div class="login-container">
+    <div
+      class="login-text"
+      style="display: flex; justify-content: center; margin-bottom: 100px"
+    >
+      <h2>Sign Up with Anotas</h2>
+    </div>
+    <div class="login-form">
+      <form id="user_form" method="post" action="{% url 'anotas:register' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="input-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            required
+            placeholder="Enter a Username"
+          />
+        </div>
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            placeholder="Enter a Password"
+          />
+        </div>
 
-{% block body_block %}
-<h1>Register for Anotas</h1>
-{% if registered %}
-Anotas says: <strong>thank you for registering!</strong>
-<a href="{% url 'anotas:index' %}">Return to the homepage.</a><br />
-{% else %}
-Anotas says: <strong>register here!</strong><br />
-<form id="user_form" method="post" action="{% url 'anotas:register' %}"
-    enctype="multipart/form-data">
+        <div class="submit-btn" style="margin-top: 60px">
+          <button type="submit" name="submit">Sign Up</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
-    {% csrf_token %}
-    {{ user_form.as_p }}
-    {{ profile_form.as_p }}
-    <input type="submit" name="submit" value="Register" />
-</form>
-{% endif %}
 {% endblock %}

@@ -1,37 +1,25 @@
 from django import forms
-from anotas.models import Page, Category, Note
 from django.contrib.auth.models import User
-from anotas.models import UserProfile
+from anotas.models import Subject, Note, UserProfile
 from markdownx.fields import MarkdownxFormField
 
-class CategoryForm(forms.ModelForm):
-    name = forms.CharField(max_length=128, help_text="Please enter the category name.")
-    views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-    likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-    slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
+# class PageForm(forms.ModelForm):
+#     title = forms.CharField(max_length=128, help_text="Please enter the title of the page.")
+#     url = forms.URLField(max_length=200, help_text="Please enter the URL of the page.")
+#     views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
 
-    class Meta:
+#     class Meta:
+#         model = Page
+#         exclude = ('subject',)
 
-        model = Category
-        fields = ('name',)
-
-class PageForm(forms.ModelForm):
-    title = forms.CharField(max_length=128, help_text="Please enter the title of the page.")
-    url = forms.URLField(max_length=200, help_text="Please enter the URL of the page.")
-    views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-
-    class Meta:
-        model = Page
-        exclude = ('category',)
-
-    def clean(self):
-        cleaned_data = self.cleaned_data
-        url = cleaned_data.get('url')
-        if url and not url.startswith('http://'):
-            url = f'http://{url}'
-            cleaned_data['url'] = url
-        return cleaned_data
+#     def clean(self):
+#         cleaned_data = self.cleaned_data
+#         url = cleaned_data.get('url')
+#         if url and not url.startswith('http://'):
+#             url = f'http://{url}'
+#             cleaned_data['url'] = url
+#         return cleaned_data
     
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -42,13 +30,28 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture',)
+        slug = forms.CharField(widget=forms.HiddenInput(), required=False)
+        fields = ('picture',)
 
 class NoteForm(forms.ModelForm):
-    title = forms.CharField(max_length=128, help_text="Please enter the title of the note.")
-    #content = MarkdownxFormField()
-
+    noteTitle = forms.CharField(max_length=128, help_text="Note title:  ")
+    """choices = Subject.objects.all()
+    choiceText = ()
+    for i in list(choices):
+        print(type(Subject.objects.get(name=i)))
+        choiceText = ((Subject.objects.get(name=i), i.name),) + choiceText
+    print(choiceText)"""
+    subject = forms.ModelChoiceField(queryset=Subject.objects.all())
+    isPrivate = forms.BooleanField(help_text="Is Private", required=False)
+    
     class Meta:
         model = Note
-        fields = ['title', 'subject', 'isPrivate', 'fileName']
+        fields = ['noteTitle', "subject", 'isPrivate']
+        
+class SubjectForm(forms.ModelForm):
+    name = forms.CharField(max_length=128, help_text="Subject")
+
+    class Meta:
+        model = Subject
+        fields = ['name']
 

@@ -1,0 +1,214 @@
+* {
+    box-sizing: border-box;
+
+}
+
+/*STYLES FOR HOMEPAGE*/
+
+/*Search Box and Button*/
+.search-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-box input[type="text"] {
+    display: flex;
+    border: solid black;
+    border-radius: 10px;
+    outline: none;
+    background: none;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 100px;
+    margin-bottom: 200px;
+    font-size: 16px;
+    width: 600px;
+    padding: 10px 20px;
+}
+
+.search-box button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-top: 100px;
+    margin-bottom: 200px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.search-box button:hover {
+    background-color: #45a049;
+}
+
+
+/*Top Subject Text*/
+.top-subjects {
+    font-family: Arial, sans-serif;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*Subject Boxes*/
+.subjects {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-bottom: 300px;
+}
+
+.subject1, .subject2, .subject3 {
+    width: 30%;
+
+}
+
+.subject {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    height: 600%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/*About Anotas Section*/
+.aboutHeading {
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.aboutDescriptionBox {
+    margin-bottom: 12%;
+}
+
+.aboutText {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 30px;
+    padding-left: 80px;
+    padding-right: 80px;
+    font-size: 75%;
+}
+
+
+/* STYLES FOR LOGIN PAGE */
+
+.loginTemplate {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15vh;
+    margin-bottom: 28vh;
+
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: 42%;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container {
+    flex: 1;
+    padding: 2em;
+    
+}
+
+.image-placeholder {
+    flex: 1;
+    background-image: url(../images/Anotas_Logo.jpeg);
+    /* Placeholder for image URL */
+    background-size: cover;
+    background-position: center;
+    max-width: 50%;
+    
+    
+}
+
+.header h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.login-text h2 {
+    color: #333;
+    margin-bottom: 0.5em;
+}
+
+.alternate-login {
+    text-align: left;
+    margin-bottom: 2em;
+    font-size: x-large;
+}
+
+.alternate-login a {
+    color: #007bff;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.alternate-login a:hover {
+    text-decoration: underline;
+}
+
+.input-group {
+    margin-bottom: 1em;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5em;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.75em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.forgot-password {
+    text-align: right;
+    margin-bottom: 2em;
+    font-size: medium;
+}
+
+.forgot-password a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+.submit-btn button {
+    width: 100%;
+    font-size: 18px;
+    padding: 1em;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-btn button:hover {
+    background-color: #0056b3;
+}

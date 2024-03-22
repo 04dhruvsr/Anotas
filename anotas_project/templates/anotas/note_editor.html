@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% extends 'anotas/base.html' %}
+{% load static %}
+<script src="{% static 'reader.js' %}"></script>
+{% block title_block %}
+    <title>{{title}}</title>
+{% endblock %}
+
+{% block body_block %}
+        <h1>{{title}}</h1>
+        <div>
+            <textarea id="inpbox" name="input" rows="10" cols="100">
+                {{text}}
+            </textarea>
+            <button onclick="readText()">Save Text</button>
+        </div>
+{% endblock %}

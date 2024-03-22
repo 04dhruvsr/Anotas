@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% extends 'anotas/base.html' %}
+{% load static %}
+{% block title_block %}
+    <title>Anotas</title>
+{% endblock %}
+
+{% block body_block %}
+
+        <div>
+        {% if user_search %}
+            <h2>Search results for: {{ user_search }}</h2>
+            <!--link to the note for viewing-->
+            {% if notes %}
+                <strong>Notes matching your search:</strong><br>
+                <ul>
+                {% for note in notes %}
+                    <li>{{ note.noteTitle }}</li><br>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <strong>No notes match your search</strong><br><br>
+            {% endif %}
+            {% if categories %}
+            <strong>Categories matching your search:</strong><br>
+                <ul>
+                {% for category in categories %}
+                    <li><a href="{% url 'anotas:show_category' category.slug %}">{{ category.name }}</a></li><br>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <strong>No categories match your search</strong><br><br>
+            {% endif %}
+        {% else %}
+            <h2>Nothing was searched</h2><br>
+        {% endif %}
+        <a href="{% url 'anotas:home' %}">Go back</a>
+        </div>
+{% endblock %}
