@@ -1,19 +1,11 @@
 import os
-import random
-os.environ.setdefault('DJANGO_SETTINGS_MODULE','anotas_project.settings')
-
 import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'anotas_project.settings')
 django.setup()
 from anotas.models import Category, Page
-def populate():
-    users = ["michel", "alvaro", "juan",]
-    users = create_users()
-    for user in users:
-        pass
-        
-
 
 def populate():
+    view_number = 10
     python_pages = [
         {'title': 'Official Python Tutorial',
         'url':'http://docs.python.org/3/tutorial/'},
@@ -22,47 +14,54 @@ def populate():
         {'title':'Learn Python in 10 Minutes',
         'url':'http://www.korokithakis.net/tutorials/python/'} ]
 
-    django_pages = [
-        {'title':'Official Django Tutorial',
-        'url':'https://docs.djangoproject.com/en/2.1/intro/tutorial01/'},
-        {'title':'Django Rocks',
-        'url':'http://www.djangorocks.com/'},
-        {'title':'How to Tango with Django',
-        'url':'http://www.tangowithdjango.com/'} ]
+    users_data = [
+        {"username": "user1", "email": "user1@example.com", "password": "password1","user":None},
+        {"username": "user2", "email": "user2@example.com", "password": "password2","user":None},
+        {"username": "user3", "email": "user3@example.com", "password": "password3","user":None},
+    ]
 
-    other_pages = [
-        {'title':'Bottle',
-        'url':'http://bottlepy.org/docs/dev/'},
-        {'title':'Flask',
-        'url':'http://flask.pocoo.org'} ]
-
-    cats = {'Python': {'pages': python_pages, 'views': 128, 'likes': 64,},
-            'Django': {'pages': django_pages, 'views': 64, 'likes': 32,},
-            'Other Frameworks': {'pages': other_pages, 'views': 32, 'likes': 16,} }
+    notes_data = [
+        {"noteTitle": "Note 1", "userID": 0, "subject_id": 0, "isPrivate": False},
+        {"noteTitle": "Note 2", "userID": 1, "subject_id": 1, "isPrivate": True},
+        {"noteTitle": "Note 3", "userID": 2, "subject_id": 2, "isPrivate": False}
+    ]
 
 
-    for cat, cat_data in cats.items():
-        c = add_cat(cat, cat_data)
-        for p in cat_data['pages']:
-            add_page(c, p['title'], p['url'],views=view_number)
-            view_number += 10
+    i= 0
+    for subject_data in subjects_data:
+        i+=1
+        subject = subject_data['name']
+        if not Subject.objects.filter(name=subject).exists():
+            subject = Subject.objects.create(**subject_dict)
+            subject.save()
+            subjects[i]["subjects"] = subject
 
-    for c in Category.objects.all():
-        for p in Page.objects.filter(category=c):
-            print(f'- {c}: {p}')
 
-def add_page(cat, title, url, views=0):
-    p = Page.objects.get_or_create(category=cat, title=title)[0]
-    p.url=url
-    p.views=views
-    p.save()
-    return p
 
-def add_cat(name, name_data):
-    c = Category.objects.get_or_create(name=name, views=name_data['views'], likes=name_data['likes'])[0]
-    c.save()
-    return c
+
+    i= 0
+    for user_data in users_data:
+        username = user_data['username']
+        if not User.objects.filter(username=username).exists():
+            user = User.objects.create_user(**user_dict)
+            user = UserProfile.objects.create(user)
+            users_data[i]["user"] = user
+            i +=1
+
+
+    for note_data in notes_data:
+        note = Note(
+        subject= subjects_data[int(note_data["subject_id"])]["subject"],
+        noteTitle=note_data["noteTitle"],
+        isPrivate=note_data["isPrivate"],
+        userID = users_data[int(note_data["userID"])]["user"],
+    )
+        note.save()
+
+# Call the function to populate the database
+
+
 
 if __name__ == '__main__':
     print('Starting Anotas population script...')
-    populate()
+    populate_database()
