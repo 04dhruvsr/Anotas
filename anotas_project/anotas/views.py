@@ -75,7 +75,7 @@ def add_note(request):
             print(note.noteTitle)
             f = open(note.fileName, "w")
             f.write("")
-            #return redirect(reverse('anotas:note_editor', kwargs={'note_name_slug': note.noteTitle}))
+            return redirect(reverse('anotas:note_editor', kwargs={'note_name_slug': note.noteTitle}))
         elif sub_form.is_valid():
             subject = sub_form.save()
             subject.save()
@@ -179,13 +179,16 @@ def note_editor(request, note_name_slug): #TODO doesnt read yet
         local_path = local_path[:-6]
         print(local_path)
         f = open(local_path + note.fileName, "r")
-        context_dict["existing"] = f.readlines()
+        text = ""
+        for line in f.readlines():
+            text += line + " "
         context_dict["title"] = note.noteTitle
         print(f.readlines())
         print(note.fileName)
+        context_dict["text"] = text
         f.close()
     except Note.DoesNotExist:
-        context_dict['existing'] = None
+        context_dict['text'] = None
         context_dict["title"] = None
     return render(request, "anotas/note_editor.html", context=context_dict)
 
