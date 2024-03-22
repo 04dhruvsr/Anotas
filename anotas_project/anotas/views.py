@@ -70,11 +70,12 @@ def add_note(request):
 
             note = form.save(commit=False)
             note.views = 0
+            note.userID = get_object_or_404(UserProfile, user=request.user)
             note.save()
             print(note.noteTitle)
             f = open(note.fileName, "w")
             f.write("")
-            return redirect(reverse('anotas:note_editor', kwargs={'note_name_slug': note.noteTitle}))
+            #return redirect(reverse('anotas:note_editor', kwargs={'note_name_slug': note.noteTitle}))
         elif sub_form.is_valid():
             subject = sub_form.save()
             subject.save()

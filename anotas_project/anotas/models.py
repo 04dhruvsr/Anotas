@@ -42,7 +42,7 @@ class Note(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.fileName:
-            self.fileName = f"{self.noteTitle}.txt"
+            self.fileName = f"{self.noteTitle}.md"
             self.lastSave = tz.now()
             self.slug = slugify(self.noteTitle)
             # self.past_owners +=
