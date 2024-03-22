@@ -38,17 +38,16 @@ class NoteForm(forms.ModelForm):
     subject = forms.CharField(max_length=128, help_text="Note subject")
     isPrivate = forms.BooleanField(help_text="Is Private", required=False)
     fileName = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    content = forms.Textarea()
 
     class Meta:
         model = Note
-        fields = ['noteTitle', 'subject', 'isPrivate', 'fileName', 'content']
+        fields = ['noteTitle', 'subject', 'isPrivate', 'fileName']
         
-class EditForm(forms.ModelForm):
-    content = forms.Textarea()
-    class Meta:
-        model = Note
-        fields = ["content"]
+# class EditForm(forms.ModelForm):
+#     content = forms.Textarea()
+#     class Meta:
+#         model = Note
+#         fields = ["content"]
         
 class SubjectForm(forms.ModelForm):
     name = forms.CharField(max_length=128, help_text="What subject is this for")

@@ -129,7 +129,7 @@ def copy_note(request, note_id):
 def user_page(request):
     context_dict = {}
     try:
-        notes = Note.objects.filter(userID=request.user.get_username())
+        notes = Note.objects.filter(userID=request.user.userID)
         print(request.user.get_username())
         print(Note.objects.filter(userID=request.user.get_username()))
         context_dict['notes'] = notes
@@ -185,30 +185,6 @@ def note_editor(request, note_name_slug):
         context_dict["title"] = None
     return render(request, "anotas/note_editor.html", context=context_dict)
 
-@login_required
-def add_note(request):
-    note_form = NoteForm()
-    request.method = "POST"
-    if request.method == 'POST':
-        note_form = NoteForm(request.POST)
-        if note_form.is_valid():
-            note = note_form.save(commit=False)
-            noteTitle = note_form.cleaned_data["noteTitle"]
-            content = note_form.cleaned_data["content"]
-            subject = note_form.cleaned_data["subject"]
-            isPrivate = note_form.cleaned_data["isPrivate"]
-            note = Note(noteTitle=noteTitle, content=content, subject=subject,isPrivate=isPrivate)
-            note.set_fileName()
-            note.set_userID(request)
-            note.save()
-                
-            f = open(note.get_fileName(), "w")
-            f.write(content)
-        else:
-            print("uh oh")
-            print(note_form.errors)
-    print(note_form.is_valid())
-    return render(request, 'anotas/note_reader.html', {'note_form': note_form})
 
 def user_login(request):
     if request.method == 'POST':
