@@ -17,6 +17,26 @@
         <h1>Anotas Index</h1>
 
         <div>
+<<<<<<< Updated upstream
+<<<<<<<< Updated upstream:anotas_project/templates/anotas/index.html
+========
+=======
+<<<<<<< Updated upstream:anotas_project/templates/anotas/index.html
+=======
+>>>>>>> Stashed changes
+        <br>
+        <form method=POST action="{% url 'anotas:search_results'%}">
+            {% csrf_token %}
+            <center>
+            <input type="text" placeholder="Search" name="user_search">
+            <button class="btn-outline-secondary" type="submit"> Search</button>
+            </center>
+        </form>
+<<<<<<< Updated upstream
+>>>>>>>> Stashed changes:anotas_project/templates/anotas/home.html
+=======
+>>>>>>> Stashed changes:anotas_project/templates/anotas/home.html
+>>>>>>> Stashed changes
 >>>>>>>> fa15d44cc0c462e757959a5d60da1b4fcaca6daf:anotas_project/templates/anotas/index.html
         <h2>Most Liked Categories</h2>
         {% if categories %}

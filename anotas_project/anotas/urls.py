@@ -16,4 +16,5 @@ path('logout/', views.user_logout, name='logout'),
 path('user/note/', views.add_note, name='note reader'),
 path('user/', views.user_page, name='user page'),
 path('user/<slug:note_name_slug>/',views.note_editor, name='note_editor'),
+path('search_results/', views.search_results, name='search_results')
 ]

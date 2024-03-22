@@ -211,6 +211,15 @@ def user_login(request):
         
     else:
         return render(request, 'anotas/login.html')
+
+def search_results(request):
+    if request.method == "POST":
+        user_search= request.POST["user_search"]
+        notes= Note.objects.filter(noteTitle__contains= user_search)
+        categories= Category.objects.filter(name__contains= user_search)
+        return render(request, 'anotas/search_results.html', {"user_search": user_search, "notes": notes, "categories": categories})
+    else:
+        return render(request, 'anotas/search_results.html')
     
 @login_required
 def restricted(request):
