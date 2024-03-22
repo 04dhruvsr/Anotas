@@ -55,4 +55,10 @@ class NoteForm(forms.ModelForm):
     class Meta:
         model = Note
         fields = ['noteTitle', 'subject', 'isPrivate', 'fileName', 'content']
+        
+class EditForm(forms.ModelForm):
+    content = forms.Textarea()
+    class Meta:
+        model = Note
+        fields = ["content"]
 

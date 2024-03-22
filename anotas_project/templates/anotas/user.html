@@ -1,13 +1,14 @@
-<!DOCTYPE html>
+{% extends 'anotas/base.html' %}
+{% load static %}
 
-<ul>
-{% if notes %}
-    {% for n in notes %}
-        <li>
-            <a href="{% url 'anotas:user_page' n.slug %}">{{ n.noteTitle }}</a>
-        </li>
-    {% endfor %}
-{% else %}
-    <li><strong>No Notes.</strong></li>
-{% endif %}
-</ul>
+{% block body_block %}
+    {% if notes %}
+    <ul>
+        {% for note in notes %}
+        <li><a href="{{ note.noteTitle }}">{{ note.noteTitle }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <strong>No notes.</strong>
+    {% endif %}
+{% endblock %}

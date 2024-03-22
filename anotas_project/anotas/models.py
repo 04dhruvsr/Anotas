@@ -48,6 +48,7 @@ class Note(models.Model):
   #  viewCount = models.PositiveIntegerField(default=0)
    # copyCount = models.PositiveIntegerField(default=0)
     fileName = models.CharField(max_length=255, blank=True, null=True)
+    slug = models.SlugField(unique=True)
     
     def set_noteID(self, inp):
         self.noteID = inp
@@ -60,6 +61,10 @@ class Note(models.Model):
         
     def set_userID(self, request):
         self.userID = request.user.get_username()
+        
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.noteTitle)
+        super(Note, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.noteTitle
