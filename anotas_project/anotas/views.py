@@ -38,7 +38,6 @@ def show_subject(request, subject_name_slug):
         context_dict['subject'] = None
         context_dict['pages'] = None
     return render(request, 'anotas/subject.html', context=context_dict)
-
 @login_required
 def add_subject(request):
     form = SubjectForm()
@@ -102,26 +101,21 @@ def register(request):
 @login_required
 def copy_note(request, note_id):
     original_note = get_object_or_404(Note, id=note_id)
-    
+    new_owner = request.user
     old_owners = original_note.past_owners
     old_owners = old_owners.my_char_field
-
-    previous_owner = get_object_or_404(UserID,original_note.userID).username
-    # new_owner.username
-    while len(old_owners+" "+ previous_owner)>255:
+    while len(old_owners+" "+ new_owner.username)>255:
         old_owners = old_owners.split(" ")
         old_owners = old_owners[1:]
         old_owners = " ".join(old_owners)
-    old_owners = old_owners+ " " + previous_owner
 
-    new_owner = request.user
     new_note = Note(
         subject=original_note.subject,
         title=original_note.title,
         content=original_note.content,
-        old_owners = old_owners,
-        userID = new_owner,
-        copyCount = original_note.copyCount + 1,
+        old_owners = old_owners
+        owner = new_owner
+        copyCount = original_note.copyCount + 1
     )
 
     new_note.save()

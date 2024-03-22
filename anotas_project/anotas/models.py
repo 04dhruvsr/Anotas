@@ -58,7 +58,7 @@ class Note(models.Model):
         if not self.fileName:
             self.fileName = f"{self.noteTitle}.txt"
             self.lastSave = tz.now
-            # self.past_owners +=
+            self.past_owners +
         
         super(Note, self).save(*args, **kwargs)
 
