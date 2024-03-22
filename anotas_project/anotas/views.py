@@ -64,7 +64,9 @@ def add_note(request):
             note = form.save(commit=False)
             note.views = 0
             note.save()
-            return redirect(reverse('anotas:show_subject', kwargs={'subject_name_slug': subject_name_slug}))
+            f = open(note.get_fileName(), "w")
+            f.write()
+            return redirect(reverse('anotas:note_editor', kwargs={'note_name_slug': note.noteTitle}))
         else:
             print(form.errors)
     context_dict = {'form': form}

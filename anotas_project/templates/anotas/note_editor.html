@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% extends 'anotas/base.html' %}
 {% load static %}
+<script src="{% static 'reader.js' %}"></script>
 {% block title_block %}
     <title>{{title}}</title>
 {% endblock %}
@@ -20,5 +21,8 @@
                 {% endfor %}
                 <input type="submit" name="submit" value="Save Note" />
             </form>
+            <textarea id="inpbox" name="input" rows="10" cols="100">
+            </textarea>
+            <button onclick="readText()">Save Text</button>
         </div>
 {% endblock %}
