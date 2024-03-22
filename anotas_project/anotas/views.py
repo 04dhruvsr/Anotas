@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from anotas.forms import CategoryForm,PageForm, UserForm,UserProfileForm, NoteForm
+from anotas.forms import CategoryForm,PageForm, UserForm,UserProfileForm, NoteForm, EditForm
 from django.shortcuts import redirect
 from django.urls import reverse
 from anotas.models import Category, Page, Note, UserProfile
@@ -120,6 +120,8 @@ def user_page(request):
     context_dict = {}
     try:
         notes = Note.objects.filter(userID=request.user.get_username())
+        print(request.user.get_username())
+        print(Note.objects.filter(userID=request.user.get_username()))
         context_dict['notes'] = notes
     except Category.DoesNotExist:       
         context_dict['notes'] = None
@@ -127,31 +129,52 @@ def user_page(request):
 
 def add_note(request):
     note_form = NoteForm()
+    request.method = "POST"
     if request.method == 'POST':
         note_form = NoteForm(request.POST)
         if note_form.is_valid():
+            note = note_form.save(commit=False)
             noteTitle = note_form.cleaned_data["noteTitle"]
             content = note_form.cleaned_data["content"]
             subject = note_form.cleaned_data["subject"]
             isPrivate = note_form.cleaned_data["isPrivate"]
             note = Note(noteTitle=noteTitle, content=content, subject=subject,isPrivate=isPrivate)
             note.set_fileName()
-            note.set_userID
+            note.set_userID(request)
             note.save()
-            
-            print(note_form.cleaned_data['content'])
-            f = open(note.get_fileName, "w")
+                
+            f = open(note.get_fileName(), "w")
             f.write(content)
-            return redirect('/anotas/')
         else:
+            print("uh oh")
             print(note_form.errors)
-
+    print(note_form.is_valid())
     return render(request, 'anotas/note_reader.html', {'note_form': note_form})
-    
-def display_file(request):
-    context_dict = {'textgoeshere' : 'text(eventually)'}
-    return render(request, "anotas/note_reader.html", context=context_dict)
-    
+
+def note_editor(request, note_name_slug):
+    context_dict = {}
+    try:
+        note = Note.objects.get(slug=note_name_slug.lower(), userID=request.user.get_username())
+        f = open(note.get_fileName(), "r")
+        context_dict["existing"] = f.readlines()
+        context_dict["title"] = note.noteTitle
+        print(f.readlines())
+        print(note.get_fileName())
+        f.close()
+        edit_form = EditForm(request.POST)
+        request.method = "POST"
+        if request.method == "POST":
+            if edit_form.is_valid():
+                print(edit_form.cleaned_data)
+                content = edit_form.cleaned_data["content"]
+                f = open(note.get_fileName(), "w")
+                f.write(content)
+    except Note.DoesNotExist:
+        context_dict['existing'] = None
+        context_dict["title"] = None
+    return render(request, "anotas/note_editor.html", context=context_dict)
+        
+        
 @login_required
 def restricted(request):
     return HttpResponse("Since you're logged in, you can see this text!")
