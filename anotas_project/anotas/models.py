@@ -38,6 +38,10 @@ class Note(models.Model):
     viewCount = models.PositiveIntegerField(default=0)
     copyCount = models.PositiveIntegerField(default=0)
     fileName = models.CharField(max_length=255, blank=True, null=True)
+    content = MarkdownxField(default="") #this causes 
+    # Page not found (404)
+    # Request Method:	POST
+    # Request URL:	http://127.0.0.1:8000/markdownx/markdownify/
 
     def save(self, *args, **kwargs):
         if not self.fileName:

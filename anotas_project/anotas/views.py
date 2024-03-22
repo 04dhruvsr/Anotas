@@ -126,6 +126,89 @@ def copy_note(request, note_id):
 
     return redirect('anotas:show_note', note_id=new_note.id)
 
+def user_page(request):
+    context_dict = {}
+    try:
+        notes = Note.objects.filter(userID=request.user.get_username())
+        print(request.user.get_username())
+        print(Note.objects.filter(userID=request.user.get_username()))
+        context_dict['notes'] = notes
+    except Note.DoesNotExist:       
+        context_dict['notes'] = None
+    return render(request, 'anotas/user.html', context=context_dict)
+
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        
+        if user:
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('anotas:home'))
+            else:
+                return HttpResponse("Your anotas account is disabled.")
+        else:
+            print(f"Invalid login details: {username}, {password}")
+            return HttpResponse("Invalid login details supplied.")
+        
+    else:
+        return render(request, 'anotas/login.html')
+
+@login_required
+def note_editor(request, note_name_slug):
+    context_dict = {}
+    try:
+        note = Note.objects.get(slug=note_name_slug.lower(), userID=request.user.get_username())
+        local_path = os.path.dirname(__file__)
+        file_path = os.path.relpath('..\\' + note.get_fileName(), local_path)
+        file_path = os.path.relpath('..\\', file_path)
+        print("Wow", "", file_path)
+        f = open(file_path, "r")
+        context_dict["existing"] = f.readlines()
+        context_dict["title"] = note.noteTitle
+        print(f.readlines())
+        print(note.get_fileName())
+        f.close()
+        edit_form = EditForm(request.POST)
+        request.method = "POST"
+        if request.method == "POST":
+            if edit_form.is_valid():
+                print(edit_form.cleaned_data)
+                content = edit_form.cleaned_data["content"]
+                f = open(note.get_fileName(), "w")
+                f.write(content)
+    except Note.DoesNotExist:
+        context_dict['existing'] = None
+        context_dict["title"] = None
+    return render(request, "anotas/note_editor.html", context=context_dict)
+
+@login_required
+def add_note(request):
+    note_form = NoteForm()
+    request.method = "POST"
+    if request.method == 'POST':
+        note_form = NoteForm(request.POST)
+        if note_form.is_valid():
+            note = note_form.save(commit=False)
+            noteTitle = note_form.cleaned_data["noteTitle"]
+            content = note_form.cleaned_data["content"]
+            subject = note_form.cleaned_data["subject"]
+            isPrivate = note_form.cleaned_data["isPrivate"]
+            note = Note(noteTitle=noteTitle, content=content, subject=subject,isPrivate=isPrivate)
+            note.set_fileName()
+            note.set_userID(request)
+            note.save()
+                
+            f = open(note.get_fileName(), "w")
+            f.write(content)
+        else:
+            print("uh oh")
+            print(note_form.errors)
+    print(note_form.is_valid())
+    return render(request, 'anotas/note_reader.html', {'note_form': note_form})
 
 def user_login(request):
     if request.method == 'POST':

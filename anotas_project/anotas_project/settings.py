@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'anotas',
     'markdownx',
 ]
+MARKDOWNX_MARKDOWN_EXTENSIONS = ['fenced_code', 'codehilite']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

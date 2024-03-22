@@ -30,19 +30,30 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture',)
+        slug = forms.CharField(widget=forms.HiddenInput(), required=False)
+        fields = ('picture',)
 
 class NoteForm(forms.ModelForm):
-    noteTitle = forms.CharField(max_length=128, help_text="Please enter the title of the note.")
+    noteTitle = forms.CharField(max_length=128, help_text="Note title:  ")
+    subject = forms.CharField(max_length=128, help_text="Note subject")
+    isPrivate = forms.BooleanField(help_text="Is Private", required=False)
+    fileName = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    content = forms.Textarea()
 
     class Meta:
         model = Note
-        # fields = ['noteTitle', 'subject', 'isPrivate', 'fileName']
-        fields = ['noteTitle', 'isPrivate', 'subject']
-
+        fields = ['noteTitle', 'subject', 'isPrivate', 'fileName', 'content']
+        
+class EditForm(forms.ModelForm):
+    content = forms.Textarea()
+    class Meta:
+        model = Note
+        fields = ["content"]
+        
 class SubjectForm(forms.ModelForm):
     name = forms.CharField(max_length=128, help_text="What subject is this for")
 
     class Meta:
         model = Note
         fields = ['name']
+
