@@ -13,9 +13,7 @@ def home(request):
     subject_list = Subject.objects.order_by('-likes')[:5]
     context_dict = {}
     context_dict['subject'] = subject_list
-
-    # context_dict['pages'] = page_list
-    request.session.set_test_cookie()
+    #context_dict['pages'] = page_list
 
     return render(request, 'anotas/home.html', context=context_dict)
 
@@ -216,8 +214,8 @@ def search_results(request):
     if request.method == "POST":
         user_search= request.POST["user_search"]
         notes= Note.objects.filter(noteTitle__contains= user_search)
-        categories= Category.objects.filter(name__contains= user_search)
-        return render(request, 'anotas/search_results.html', {"user_search": user_search, "notes": notes, "categories": categories})
+        subjects= Subject.objects.filter(name__contains= user_search)
+        return render(request, 'anotas/search_results.html', {"user_search": user_search, "notes": notes, "subjects": subjects})
     else:
         return render(request, 'anotas/search_results.html')
     

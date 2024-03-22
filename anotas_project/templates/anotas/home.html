@@ -5,8 +5,13 @@
 
     <!-- Search Bar -->
     <div class="search-box">
-        <input type="text" placeholder="Search Subject...">
-        <button type="submit">Search</button>
+        <form method=POST action="{% url 'anotas:search_results'%}">
+            {% csrf_token %}
+            <center>
+            <input type="text" placeholder="Search" name="user_search">
+            <button type="submit">Search</button>
+            </center>
+        </form>
     </div>
 
     <!-- Top Subjects and Subjects -->
